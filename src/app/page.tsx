@@ -1,9 +1,9 @@
-import HeaderMenu from "./components/header-menu/HeaderMenu";
+import MainPrincipal from "./components/mainPrincipal/MainPrincipal";
 
 export default function Home() {
   return (
-    <div className="container">
-      <HeaderMenu />
+    <div>
+      <MainPrincipal />
     </div>
   )
 }

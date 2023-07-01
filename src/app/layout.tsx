@@ -17,7 +17,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <header>
-          <menu className="menu">
+          <menu>
             
           </menu>
         </header>
