@@ -96,3 +96,13 @@ html {
         max-width: 100%;
     }
 }
+
+@media screen and (max-width: 767px) {
+    .flex.flex-col.xs\:items-center {
+        align-items: center;
+    }
+
+    .flex.flex-col.xs\:items-center img {
+        max-width: 70%;
+    }
+}
