@@ -22,15 +22,15 @@ export default function HeaderMenu() {
     return (
         <div className="relative">
             <div
-                className={`fixed inset-0 bg-black bg-opacity-90 z-50 transition-opacity duration-300 ease-in-out pointer-events-none ${isMenuOpen ? "block" : "hidden"
+                className={`fixed inset-0 bg-black z-50 transition-opacity duration-300 ease-in-out pointer-events-none ${isMenuOpen ? "block" : "hidden"
                     }`}
             >
-                <div className="flex flex-col items-center justify-between p-8 h-screen w-3/4 ">
-                    <div className="flex flex-col space-y-4 w-full">
+                <div className="flex flex-col items-center justify-between p-8 h-screen w-3/4">
+                    <div className="flex flex-col w-full">
                         <img src="./roundLogo.svg" alt="logo" width={80} />
                     </div>
                     <ul className="flex flex-col space-y-4 w-full">
-                        <li className=" border-b border-gray-200">
+                        <li className="border-b border-gray-200">
                             <Link
                                 className="text-white hover:text-gray-800 transition duration-300"
                                 href=""
@@ -89,6 +89,8 @@ export default function HeaderMenu() {
                             </li>
                         </ul>
                     </div>
+                    <div className="flex flex-col space-y-4 w-full">
+                        </div>
                 </div>
             </div>
 
