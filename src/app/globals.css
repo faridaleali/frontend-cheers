@@ -82,6 +82,37 @@ html {
     }
 }
 
+@media screen and (max-width: 767px) {
+    .bg_main {
+        height: auto;
+        padding-top: 100px;
+    }
+
+    .bg_main .flex {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .bg_main img {
+        max-width: 100%;
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .bg-banner {
+        height: 100vh;
+        padding-top: 0;
+    }
+
+    .bg-banner .flex {
+        align-items: center;
+    }
+
+    .bg-banner img {
+        max-width: 100%;
+    }
+}
+
 @media screen and (max-width: 1180px) {
     .bg-banner {
         height: auto;
@@ -106,3 +137,5 @@ html {
         max-width: 70%;
     }
 }
+
+
