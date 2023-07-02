@@ -1,3 +1,4 @@
+import About from "../about/About";
 import Banner from "../banner/header_banner/Banner";
 import HeaderMenu from "../header-menu/HeaderMenu";
 import BottomMain from "../main/BottomMain";
@@ -15,6 +16,7 @@ export default function MainPrincipal() {
                     <Main />
                     <BottomMain />
                     <YellowBannerMain />
+                    <About />
                     <Banner />
                 </main>
             </div>
