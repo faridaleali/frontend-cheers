@@ -1,0 +1,108 @@
+/* styles/styles.css */
+
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+/* Aquí puedes agregar estilos personalizados */
+
+body,
+html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #ffffff;
+    text-align: left;
+    background-color: #000000;
+}
+
+.container__header {
+    background-image: url('../../public/background.svg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    width: 100%;
+}
+
+.bg_main {
+    height: 50vh;
+}
+
+.bg-header-menu {
+    background: linear-gradient(180deg, #000000 0%, rgba(0, 0, 0, 0) 100%);
+    height: 20vh;
+}
+
+.bg-header-bottom {
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #000000 100%);
+    height: 20vh;
+}
+
+.bg-yellow-main {
+    background: #FFFF01;
+    height: 10vh;
+}
+
+.bg-banner {
+    position: relative;
+    background-image: url('../../public/Rectangle.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    width: 100%;
+}
+
+.bg-banner::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+@media screen and (max-width: 767px) {
+    .bg-banner {
+        height: auto;
+        padding-top: 100px;
+    }
+
+    .bg-banner .flex {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .bg-banner img {
+        max-width: 100%;
+    }
+}
+
+@media screen and (max-width: 1180px) {
+    .bg-banner {
+        height: auto;
+        padding-top: 100px;
+    }
+
+    .bg-banner .flex {
+        align-items: center;
+    }
+
+    .bg-banner img {
+        max-width: 100%;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .flex.flex-col.xs\:items-center {
+        align-items: center;
+    }
+
+    .flex.flex-col.xs\:items-center img {
+        max-width: 70%;
+    }
+}
