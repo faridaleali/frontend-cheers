@@ -48,23 +48,9 @@ html {
 }
 
 .bg-banner {
-    position: relative;
     background-image: url('../../public/Rectangle.png');
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
-    height: 100vh;
-    width: 100%;
 }
 
-.bg-banner::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-}
 
 @media screen and (max-width: 767px) {
     .bg-banner {
@@ -94,21 +80,6 @@ html {
     }
 
     .bg_main img {
-        max-width: 100%;
-    }
-}
-
-@media screen and (min-width: 768px) {
-    .bg-banner {
-        height: 100vh;
-        padding-top: 0;
-    }
-
-    .bg-banner .flex {
-        align-items: center;
-    }
-
-    .bg-banner img {
         max-width: 100%;
     }
 }

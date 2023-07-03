@@ -20,7 +20,7 @@ export default function About() {
         </div>
         <div className="bg-[#FFFF01] h-20 w-full  flex justify-center items-center relative">
             <img src="./pollocenter.png" alt="" className="absolute bottom-0" width={230}/>
-          </div>
+        </div>
       </div>
     );
   }
