@@ -1,12 +1,13 @@
 export default function Footer() {
     return (
-        <div className="flex flex-col items-center justify-center bg-black">
-            <div className="flex flex-row items-center justify-center">
-                <img src="./roundLogo.svg" alt="" width={150} />
+        <footer className="bg-black text-center py-12 text-white">
+           
+            <div className="mb-8">
+                <img src="./roundLogo.svg" alt="Cheer’s pollo frito" className="inline-block mb-4 h-16 w-auto" />
             </div>
-            <div className="flex flex-row items-center justify-center mt-20 mb-20">
-                <p className="text-white">© Cheer’s pollo frito - 2019</p>
-            </div>
-        </div>
-    )
+            <p className="text-sm">
+                © Cheer’s pollo frito - {new Date().getFullYear()}
+            </p>
+        </footer>
+    );
 }
