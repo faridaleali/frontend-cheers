@@ -5,6 +5,9 @@ import HeaderMenu from "../header-menu/HeaderMenu";
 import BottomMain from "../main/BottomMain";
 import Main from "../main/Main";
 import YellowBannerMain from "../main/YellowMain";
+import ModalRequest from "../modal/ModalRequest";
+import ModalSectionBajon from "../modal/ModalSelectBajon";
+import ProductsPage from "../products/Products";
 
 export default function MainPrincipal() {
     return (
@@ -19,6 +22,7 @@ export default function MainPrincipal() {
                     <YellowBannerMain />
                     <About />
                     <Banner />
+                    <ProductsPage />
                     <Footer />
                 </main>
             </div>
