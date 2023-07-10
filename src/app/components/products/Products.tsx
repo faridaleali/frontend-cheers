@@ -6,7 +6,7 @@ import ModalSectionBajon from "../modal/ModalSelectBajon";
 
 
 export default function ProductsPage() {
-    const [openModal, setOpenModal] = useState(false);
+const [openModal, setOpenModal] = useState(false);
 
     const products: Product[] = [
         {
@@ -44,14 +44,14 @@ export default function ProductsPage() {
             <div className="flex items-center justify-center">
                 <button className="px-4 py-2 md:px-8 md:py-4 mt-4 flex items-center justify-center bg-custom-yellow text-black rounded transition-colors duration-300"
                     onClick={() => {
-                        setOpenModal(true);
+                        setOpenModal(!openModal);
                     }}
                 >
-                    <img src="./cart-black.svg" alt="Carrito de compras" className="mr-2 h-6 w-auto" />
-                    <h2
+                    <img src="./cart-black.svg" alt="Carrito de compras" className="mr-2 h-6 w-auto"/>
+                    <h2 
                         className="text-sm md:text-xl font-bold"
                     >
-                        Quiero mi bajón
+                       Quiero mi bajón
                     </h2>
                 </button>
             </div>
