@@ -1,36 +1,30 @@
 'use client';
-import { useState } from "react";
-import { Product, CardProductProps } from "@/app/interfaces/products.interface";
+import { useEffect, useState } from "react";
+import { Product } from "@/app/interfaces/products.interface";
 import CardProduct from "../card-products/CardProduct";
 import ModalSectionBajon from "../modal/ModalSelectBajon";
+import apiClient from "../../../../api/services/apiService";
+import Productos from '../../../../api/entities/Productos';
 
+const productosService = new Productos(apiClient);
 
 export default function ProductsPage() {
-const [openModal, setOpenModal] = useState(false);
+    const [openModal, setOpenModal] = useState(false);
+    const [products, setProducts] = useState<Product[]>([]);
 
-    const products: Product[] = [
-        {
-            id: '1',
-            title: "Producto 1",
-            description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.",
-            price: "$ 100.00",
-            imageUrl: "./product1.svg"
-        },
-        {
-            id: '2',
-            title: "Producto 2",
-            description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.",
-            price: "$ 120.00",
-            imageUrl: "./product2.svg"
-        },
-        {
-            id: '3',
-            title: "Producto 3",
-            description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.",
-            price: "$ 140.00",
-            imageUrl: "./product3.svg"
-        },
-    ];
+    useEffect(() => {
+        const fetchProductos = async () => {
+            const data = await productosService.getProductos();
+            setProducts(data.map((product: Product) => ({
+                id: product.id,
+                title: product.title,
+                description: product.description,
+                price: product.price,
+                imageUrl: product.imageUrl
+            })));
+        }
+        fetchProductos();
+    }, [])
 
     return (
         <div className="p-4 bg-gray-100">
@@ -47,11 +41,11 @@ const [openModal, setOpenModal] = useState(false);
                         setOpenModal(!openModal);
                     }}
                 >
-                    <img src="./cart-black.svg" alt="Carrito de compras" className="mr-2 h-6 w-auto"/>
-                    <h2 
+                    <img src="./cart-black.svg" alt="Carrito de compras" className="mr-2 h-6 w-auto" />
+                    <h2
                         className="text-sm md:text-xl font-bold"
                     >
-                       Quiero mi bajón
+                        Quiero mi bajón
                     </h2>
                 </button>
             </div>
