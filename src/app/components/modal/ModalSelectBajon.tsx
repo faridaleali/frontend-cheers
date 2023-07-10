@@ -16,7 +16,7 @@ export default function ModalSectionBajon() {
     return (
         <div className="modal fixed w-full h-full top-0 left-0 flex items-center justify-center">
             <div className="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"></div>
-            <div className="modal-container bg-white w-1/2 md:w-1/3 lg:w-1/4 mx-auto rounded shadow-lg z-50 overflow-y-auto">
+            <div className="modal-container bg-white w-11/12 md:w-2/3 lg:w-1/2 xl:w-1/3 mx-auto rounded shadow-lg z-50 overflow-y-auto">
                 <div className="modal-content py-4 text-left px-6 bg-black">
                     <div className="flex justify-between items-center pb-3">
                         <p className="text-2xl font-bold text-custom-yellow pb-4">Elige tu salsa</p>
@@ -139,9 +139,9 @@ export default function ModalSectionBajon() {
                                     Es un toque picantita!. Guarda!</p>
                             </div>
                         </div>
-                        <div 
+                        <div
                             className="flex justify-center items-center pb-3">
-                            <button 
+                            <button
                                 className='
                                 bg-custom-yellow
                                 hover:bg-custom-yellow
