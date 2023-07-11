@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useClientData } from "@/app/helpers/ClientDataContext";
 import { useCart } from "@/app/helpers/CartProvider";
+import { Product } from '@/app/interfaces/products.interface';
 
 const DetalleCompleto = () => {
   const { clientData } = useClientData();
@@ -10,7 +11,16 @@ const DetalleCompleto = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  const total = cart.reduce((acc, product) => acc + product.price, 0);
+  const groupedCart = cart.reduce((acc, product) => {
+    if (acc[product.id]) {
+      acc[product.id].quantity += 1;
+    } else {
+      acc[product.id] = { ...product, quantity: 1 };
+    }
+    return acc;
+  }, {} as { [key: string]: ProductWithQuantity });
+
+  const total = Object.values(groupedCart).reduce((acc, product) => acc + product.price * product.quantity, 0);
 
   return (
     <div className="bg-black h-full p-8 text-white">
@@ -29,8 +39,10 @@ const DetalleCompleto = () => {
       <div>
         <h3 className="text-xl font-bold">Productos Seleccionados</h3>
         <ul className="list-disc pl-4 mb-4">
-          {cart.map((product) => (
-            <li key={product.id} className="mb-2">{product.title} - ${product.price}</li>
+          {Object.values(groupedCart).map((product) => (
+            <li key={product.id} className="mb-2">
+              {product.title} - ${product.price} (Total: {product.quantity} pedido{product.quantity !== 1 ? 's' : ''})
+            </li>
           ))}
         </ul>
       </div>
@@ -44,3 +56,7 @@ const DetalleCompleto = () => {
 };
 
 export default DetalleCompleto;
+
+interface ProductWithQuantity extends Product {
+  quantity: number;
+}
