@@ -1,13 +1,29 @@
-'use client';
+'use client'
+import React, { useState } from 'react';
+import { useClientData } from "@/app/helpers/ClientDataContext";
+import DetalleCompleto from "../../components/detalle/page";
 
-import { useState } from 'react';
-
-export default function ModalRequest () {
+export default function ModalRequest() {
     const [isOpen, setIsOpen] = useState(true);
+    const [showDetalleCompleto, setShowDetalleCompleto] = useState(false);
+    const { clientData, setClientData } = useClientData();
 
     if (!isOpen) {
         return null;
     }
+
+    const handleSubmit = (e: { preventDefault: () => void; }) => {
+        e.preventDefault();
+        setIsOpen(false);
+    };
+
+    const handleChange = (e: { target: { value: any; }; }, field: any) => {
+        setClientData({ ...clientData, [field]: e.target.value });
+    };
+
+    const handleCompartirWhatsApp = () => {
+        setShowDetalleCompleto(true);
+    };
 
     return (
         <div className="modal fixed w-full h-full top-0 left-0 flex items-center justify-center ">
@@ -15,7 +31,13 @@ export default function ModalRequest () {
             <div className="modal-container bg-white w-11/12 sm:w-1/2 md:w-2/3 lg:w-1/2 xl:w-1/3 mx-auto rounded shadow-lg z-50 overflow-y-auto">
                 <div className="modal-content py-4 text-left px-2 sm:px-6 bg-black">
                     <div className="flex justify-between items-center pb-3">
-                        <p className="text-xl sm:text-2xl font-bold text-custom-yellow p-4">Tus Datos</p>
+                        <p className="text-xl sm:text-2xl font-bold text-custom-yellow p-4">
+                            {
+                                !showDetalleCompleto 
+                                    ? 'Elige tu salsa'
+                                    : null
+                            }
+                        </p>
                         <div className="modal-close cursor-pointer pb-4">
                             <svg onClick={() => setIsOpen(false)} className="fill-current text-white pr-2" xmlns="http://www.w3.org/2000/svg" width="18" height="18"
                                 viewBox="0 0 18 18">
@@ -25,40 +47,71 @@ export default function ModalRequest () {
                             </svg>
                         </div>
                     </div>
-    
-                    <form className='p-4'>
-                        <label className="block">
-                            <span className="text-white">Nombre y Apellido</span>
-                            <input className="form-input mt-1 block w-full border-b-2 border-custom-yellow bg-transparent text-white outline-none"  />
-                        </label>
-    
-                        <label className="block mt-2">
-                            <span className="text-white">Teléfono</span>
-                            <input className="form-input mt-1 block w-full border-b-2 border-custom-yellow bg-transparent text-white outline-none"  />
-                        </label>
-    
-                        <label className="block mt-2">
-                            <span className="text-white">Calle</span>
-                            <input className="form-input mt-1 block w-full border-b-2 border-custom-yellow bg-transparent text-white outline-none"  />
-                        </label>
-    
-                        <label className="block mt-2">
-                            <span className="text-white">Número</span>
-                            <input className="form-input mt-1 block w-full border-b-2 border-custom-yellow bg-transparent text-white outline-none" />
-                        </label>
-    
-                        <label className="block mt-2">
-                            <span className="text-white">Piso</span>
-                            <input className="form-input mt-1 block w-full border-b-2 border-custom-yellow bg-transparent text-white outline-none" />
-                        </label>
-    
-                        <div className="flex justify-center pt-2">
-                            <button
-                                className="px-4 my-6 bg-custom-yellow p-3 rounded-lg text-black hover:bg-custom-yellow hover:text-black mr-2">Compartir pedido por whatsapp</button>
-                        </div>
-                    </form>
+
+                    {
+                        !showDetalleCompleto && (
+                            <form className="p-4" onSubmit={handleSubmit}>
+                                <label className="block">
+                                    <span className="text-white">Nombre y Apellido</span>
+                                    <input
+                                        className="form-input mt-1 block w-full border-b-2 border-custom-yellow bg-transparent text-white outline-none"
+                                        value={clientData.nombre}
+                                        onChange={(e) => handleChange(e, 'nombre')}
+                                    />
+                                </label>
+
+                                <label className="block mt-2">
+                                    <span className="text-white">Teléfono</span>
+                                    <input
+                                        className="form-input mt-1 block w-full border-b-2 border-custom-yellow bg-transparent text-white outline-none"
+                                        value={clientData.telefono}
+                                        onChange={(e) => handleChange(e, 'telefono')}
+                                    />
+                                </label>
+
+                                <label className="block mt-2">
+                                    <span className="text-white">Calle</span>
+                                    <input
+                                        className="form-input mt-1 block w-full border-b-2 border-custom-yellow bg-transparent text-white outline-none"
+                                        value={clientData.calle}
+                                        onChange={(e) => handleChange(e, 'calle')}
+                                    />
+                                </label>
+
+                                <label className="block mt-2">
+                                    <span className="text-white">Número</span>
+                                    <input
+                                        className="form-input mt-1 block w-full border-b-2 border-custom-yellow bg-transparent text-white outline-none"
+                                        value={clientData.numero}
+                                        onChange={(e) => handleChange(e, 'numero')}
+                                    />
+                                </label>
+
+                                <label className="block mt-2">
+                                    <span className="text-white">Piso</span>
+                                    <input
+                                        className="form-input mt-1 block w-full border-b-2 border-custom-yellow bg-transparent text-white outline-none"
+                                        value={clientData.piso}
+                                        onChange={(e) => handleChange(e, 'piso')}
+                                    />
+                                </label>
+
+                                <div className="flex justify-center pt-2">
+                                    <button
+                                        className="px-4 my-6 bg-custom-yellow p-3 rounded-lg text-black hover:bg-custom-yellow hover:text-black mr-2"
+                                        type="button"
+                                        title="El pedido será enviado a Cheers"
+                                        onClick={handleCompartirWhatsApp}
+                                    >
+                                        Compartir pedido por WhatsApp
+                                    </button>
+                                </div>
+                            </form>
+                        )
+                    }
+                    {showDetalleCompleto && <DetalleCompleto />}
                 </div>
             </div>
         </div>
-    )
+    );
 }

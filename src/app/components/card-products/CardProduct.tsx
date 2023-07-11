@@ -1,12 +1,23 @@
 'use client'
 import { useState } from 'react';
+import { useCart } from "@/app/helpers/CartProvider";  // No olvides importar useCart
 import { Product, CardProductProps } from '../../interfaces/products.interface';
 
 export default function CardProduct({product}: CardProductProps) {
+    const { addToCart, removeFromCart } = useCart();  // Aquí utilizas useCart para obtener addToCart y removeFromCart
     const [quantity, setQuantity] = useState(0);
+    const increaseQuantity = () => {
+        setQuantity(quantity + 1);
+        addToCart(product);  // Aquí llamas a addToCart cada vez que aumentas la cantidad
+    }
 
-    const increaseQuantity = () => setQuantity(quantity + 1); 
-    const decreaseQuantity = () => quantity > 0 && setQuantity(quantity - 1); 
+    const decreaseQuantity = () => {
+        if (quantity > 0) {
+            setQuantity(quantity - 1);
+            removeFromCart(product);  // Aquí llamas a removeFromCart cada vez que disminuyes la cantidad
+        }
+    }
+
     return (
         <div className="flex flex-col justify-between p-5 w-full bg-black text-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
             <img src={product.imageUrl} alt="Product" className="w-full h-64 object-cover object-center rounded-xl" />
