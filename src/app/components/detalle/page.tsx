@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react';
+'use client'
+import { useEffect } from 'react';
 import { useClientData } from "@/app/helpers/ClientDataContext";
 import { useCart } from "@/app/helpers/CartProvider";
 import { Product } from '@/app/interfaces/products.interface';
