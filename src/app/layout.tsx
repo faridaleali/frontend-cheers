@@ -18,7 +18,6 @@ export default function RootLayout({
       <body className={inter.className}>
         <header>
           <menu>
-            
           </menu>
         </header>
         <main>{children}</main>

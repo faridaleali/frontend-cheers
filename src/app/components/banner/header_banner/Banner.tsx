@@ -1,22 +1,31 @@
+import Image from 'next/image';
+
 export default function Banner() {
-    return (
-        <>
-            <section className="bg-banner mb-20">
-                <div className="container mx-auto px-4">
-                    <div className="flex flex-wrap justify-center items-center">
-                        <div className="w-full lg:w-8/12 px-4">
-                            <img src="./altobajon.svg" alt="" />
-                        </div>
-                        <div className="w-full lg:w-4/12 px-4 mt-4 lg:mt-0">
-                            <img src="./caja.svg" alt="" className="hidden md:block" />
-                            <img src="./packaging.png" alt="" className="md:hidden" />
-                        </div>
-                    </div>
+  return (
+    <>
+      <section className="bg-banner">
+        <div className="mx-auto px-4 pt-8 bg-cover bg-center bg-opacity-75" style={{ backgroundImage: 'url(/Rectangle.png)' }}>
+          <div className="flex flex-wrap justify-center items-center">
+            <div className="w-full md:w-8/12 lg:w-6/12 xl:w-8/12 px-4 pt-8">
+              <div className="mx-auto max-w-full md:max-w-2xl">
+                <Image src="/altobajon.svg" alt="" layout="responsive" width={800} height={600} />
+              </div>
+            </div>
+            <div className="w-full md:w-4/12 lg:w-6/12 xl:w-4/12 px-4 mt-4 md:mt-0">
+              <div className="hidden md:block">
+                <div className="mx-auto max-w-full">
+                  <Image src="/caja.svg" alt="" layout="responsive" width={300} height={300} />
                 </div>
-                <div className="bg-[#FFFF01] h-20 w-full flex justify-center items-center"> 
-                    <p className="font-bold text-black xs:text-3xl  md:text-3xl">MATANDO EL BAJÓN EST.2019</p>
+              </div>
+              <div className="md:hidden">
+                <div className="mx-auto max-w-full">
+                  <Image src="/packaging.png" alt="" layout="responsive" width={300} height={300} />
                 </div>
-            </section>
-        </>
-    );
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </>
+  );
 }
