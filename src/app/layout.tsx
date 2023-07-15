@@ -1,6 +1,7 @@
 import './globals.css'
 import { Inter } from 'next/font/google'
-
+import '@fontsource/montserrat';
+import '@fontsource/montserrat/700.css';
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {

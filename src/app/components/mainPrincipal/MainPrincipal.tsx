@@ -13,21 +13,21 @@ export default function MainPrincipal() {
     return (
         <ClientDataProvider>
             <CartProvider >
-            <div className="container__header h-screen flex flex-col">
-                <nav>
-                    <HeaderMenu />
-                </nav>
-                <main>
-                    <Main />
-                    <BottomMain />
-                    <YellowBannerMain />
-                    <About />
-                    <Banner />
-                    <ProductsPage />
-                    <Footer />
-                </main>
-            </div>
-        </CartProvider>
+                <div className="container__header h-screen flex flex-col">
+                    <nav>
+                        <HeaderMenu />
+                    </nav>
+                    <main>
+                        <Main />
+                        <BottomMain />
+                        <YellowBannerMain />
+                        <About />
+                        <Banner />
+                        <ProductsPage />
+                        <Footer />
+                    </main>
+                </div>
+            </CartProvider>
         </ClientDataProvider>
     )
 }

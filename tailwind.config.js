@@ -14,7 +14,10 @@ module.exports = {
       },
       colors: {
         'custom-yellow': '#FFFF00',
-      }
+      },
+      fontFamily: {
+        sans: ['Montserrat', 'sans-serif'],
+      },
     },
   },
   plugins: [],
