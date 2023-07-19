@@ -1,5 +1,6 @@
 // Definir la interfaz del producto
 export interface Product {
+    quantity: number;
     id: string;
     title: string;
     description: string;
