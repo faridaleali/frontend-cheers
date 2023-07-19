@@ -11,34 +11,28 @@ export default function ProductsPage() {
   const [openModalRequest, setOpenModalRequest] = useState(false);
   const [openModalSelectBajon, setOpenModalSelectBajon] = useState(false);
   const [products, setProducts] = useState<Product[]>([]);
+  const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
   const [summaryText, setSummaryText] = useState("");
 
   const productosService = new Productos(apiClient);
 
   const handleContinue = () => {
-    setOpenModalRequest(true); // Abrir el modal de solicitud de datos del cliente
-    setOpenModalSelectBajon(false); // Cerrar el modal de selección de salsas
+    setOpenModalRequest(true);
+    setOpenModalSelectBajon(false);
     setSummaryText("¡Salsas seleccionadas con éxito!");
   };
 
   useEffect(() => {
     const fetchProductos = async () => {
       const data = await productosService.getProductos();
-      setProducts(
-        data.map((product: Product) => ({
-          id: product.id,
-          title: product.title,
-          description: product.description,
-          price: product.price,
-          imageUrl: product.imageUrl,
-        }))
-      );
+      setProducts(data);
     };
     fetchProductos();
   }, []);
 
-  const handleAddToCart = () => {
-    setOpenModalSelectBajon(true); // Abrir el modal de selección de salsas
+  const handleAddToCart = (product: Product) => {
+    setSelectedProductId(product.id);
+    setOpenModalSelectBajon(true);
   };
 
   return (
@@ -48,14 +42,25 @@ export default function ProductsPage() {
       </h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-4 pb-4">
         {products.map((product, index) => (
-          <CardProduct key={index} product={product} />
+          <CardProduct key={index} product={product} onAddToCart={(event) => {
+            event.preventDefault();
+            handleAddToCart(product);
+          }} /> 
         ))}
       </div>
 
       <div className="flex items-center justify-center">
         <button
-          className="flex items-center justify-center px-4 py-2 md:px-8 md:py-4 mt-4 bg-custom-yellow text-black font-semibold rounded-full hover:bg-custom-yellow-hover transition-colors duration-300"
-          onClick={handleAddToCart}
+          className={`flex items-center justify-center px-4 py-2 md:px-8 md:py-4 mt-4 bg-custom-yellow text-black font-semibold rounded-full hover:bg-custom-yellow-hover transition-colors duration-300 
+          ${!selectedProductId ? 'opacity-50 cursor-not-allowed' : ''}`}
+          onClick={() => {
+            if(selectedProductId) {
+              setOpenModalSelectBajon(true)
+            } else {
+              // You could show a message to the user here
+              console.log("Please select a product first");
+            }
+          }}
         >
           <img
             src="./cart-black.svg"
@@ -70,21 +75,18 @@ export default function ProductsPage() {
         <p className="text-center text-gray-600 mt-2">{summaryText}</p>
       )}
 
-      {openModalRequest && (
-        <ModalRequest
-          isModalOpen={openModalRequest}
-          onClose={() => setOpenModalRequest(false)}
-          onContinue={handleContinue}
-        />
-      )}
-
-      {openModalSelectBajon && (
+      
+      {openModalSelectBajon && selectedProductId && (
         <ModalSectionBajon
+          productId={selectedProductId}
           isModalOpen={openModalSelectBajon}
-          onClose={() => setOpenModalSelectBajon(false)}
+          onClose={() => {
+            setSelectedProductId(null);
+            setOpenModalSelectBajon(false);
+          }}
           onSelectSalsas={(salsas) => {
             console.log('Salsas seleccionadas:', salsas);
-            setOpenModalRequest(true); // Abrir el modal de solicitud de datos del cliente después de seleccionar salsas
+            setOpenModalRequest(true);
           }}
           onContinue={handleContinue}
         />

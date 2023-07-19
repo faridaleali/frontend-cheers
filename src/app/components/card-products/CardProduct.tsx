@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useCart } from '@/app/helpers/CartProvider';
 import { CardProductProps } from '../../interfaces/products.interface';
 
-export default function CardProduct({ product }: CardProductProps) {
+export default function CardProduct({ product, onAddToCart }: CardProductProps) {
   const { addToCart, removeFromCart } = useCart();
   const [quantity, setQuantity] = useState(0);
 
@@ -49,7 +49,7 @@ export default function CardProduct({ product }: CardProductProps) {
             +
           </button>
         </div>
-        <div className="py-2 px-4 bg-custom-yellow text-gray-800 rounded hover:bg-custom-yellow-hover transition-colors duration-300 relative">
+        <div onClick={onAddToCart} className="py-2 px-4 bg-custom-yellow text-gray-800 rounded hover:bg-custom-yellow-hover transition-colors duration-300 relative">
           <img src="./cart-black.svg" alt="Add to Cart" className="mr-2 h-6 w-auto" />
           {quantity > 0 && (
             <span className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center">
