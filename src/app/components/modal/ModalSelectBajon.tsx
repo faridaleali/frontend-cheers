@@ -1,34 +1,128 @@
-'use client';
-import React, { useState } from 'react';
-import ModalRequest from './ModalRequest';
-import { ClientDataProvider } from '@/app/helpers/ClientDataContext';
+import React, { useEffect, useState } from 'react';
+import { useCart } from '@/app/helpers/CartProvider';
+import { Product } from '@/app/interfaces/products.interface';
 
-const ModalSectionBajon = () => {
-  const [isOpen, setIsOpen] = useState(true);
-  const [countBM, setCountBM] = useState(1);
-  const [countSweetB, setCountSweetB] = useState(1);
-  const [countJason, setCountJason] = useState(1);
-  const [modalInfo, setModalInfo] = useState(false);
+interface ModalSelectBajonProps {
+  isModalOpen: boolean;
+  onClose: () => void;
+  onSelectSalsas: (salsas: { bm: number; sweetB: number; jasons: number }) => void;
+  onContinue: () => void;
+}
 
-  const decreaseCount = (setter: React.Dispatch<React.SetStateAction<number>>, count: number) => {
-    setter(count > 1 ? count - 1 : 1);
-  };
+const ModalSectionBajon: React.FC<ModalSelectBajonProps> = ({
+  isModalOpen,
+  onClose,
+  onSelectSalsas,
+  onContinue,
+}) => {
+  const { cart } = useCart();
+  const [cartProducts, setCartProducts] = useState<Product[]>(cart);
+  const [countBM, setCountBM] = useState(0);
+  const [countSweetB, setCountSweetB] = useState(0);
+  const [countJason, setCountJason] = useState(0);
+  const salsasGratisDisponibles = 2;
+  const [salsasAdicionales, setSalsasAdicionales] = useState(0);
+  const costoSalsasAdicionales = 100;
+  const [costoSalsasExtras, setCostoSalsasExtras] = useState(0);
+  const [salsasGratisSeleccionadas, setSalsasGratisSeleccionadas] = useState(salsasGratisDisponibles);
+
+  useEffect(() => {
+    setCartProducts(cart);
+  }, [cart]);
 
   const increaseCount = (setter: React.Dispatch<React.SetStateAction<number>>, count: number) => {
-    setter(count + 1);
+    const totalSalsas = countBM + countSweetB + countJason + 1;
+
+    if (totalSalsas <= 5) {
+      setter(count + 1);
+
+      if (totalSalsas > salsasGratisDisponibles) {
+        const salsasExtras = totalSalsas - salsasGratisDisponibles;
+        setCostoSalsasExtras(salsasExtras * costoSalsasAdicionales);
+      } else {
+        setCostoSalsasExtras(0);
+      }
+
+      if (totalSalsas <= salsasGratisDisponibles) {
+        setSalsasGratisSeleccionadas(salsasGratisDisponibles - totalSalsas);
+      } else {
+        setSalsasGratisSeleccionadas(0);
+      }
+    }
+    const updatedCartProducts = cartProducts.map((producto) => {
+      return {
+        ...producto,
+        salsas: {
+          bm: countBM,
+          sweetB: countSweetB,
+          jasons: countJason,
+        },
+      };
+    });
+    console.log(updatedCartProducts)
+    setCartProducts(updatedCartProducts);
+  };
+
+  const decreaseCount = (setter: React.Dispatch<React.SetStateAction<number>>, count: number) => {
+    if (count > 0) {
+      setter(count - 1);
+      const totalSalsas = countBM + countSweetB + countJason - 1;
+      if (totalSalsas < salsasGratisDisponibles) {
+        setSalsasGratisSeleccionadas(salsasGratisDisponibles - totalSalsas);
+      } else if (totalSalsas <= salsasGratisDisponibles + salsasAdicionales) {
+        setSalsasAdicionales(totalSalsas - salsasGratisDisponibles);
+        setSalsasGratisSeleccionadas(0);
+        setCostoSalsasExtras(0);
+      } else {
+        const salsasExtras = totalSalsas - salsasGratisDisponibles;
+        setSalsasAdicionales(salsasGratisDisponibles);
+        setSalsasGratisSeleccionadas(0);
+        setCostoSalsasExtras(salsasExtras * costoSalsasAdicionales);
+      }
+    }
+    // Actualizar las salsas correspondientes al producto
+    const updatedCartProducts = cartProducts.map((producto) => {
+      return {
+        ...producto,
+        salsas: {
+          bm: countBM,
+          sweetB: countSweetB,
+          jasons: countJason,
+        },
+      };
+    });
+    setCartProducts(updatedCartProducts);
   };
 
   const closeModal = () => {
-    setIsOpen(false);
+    onClose();
   };
 
-  const openModalInfo = () => {
-    setModalInfo(true);
-  };
+  const handleConfirm = () => {
+    const salsas = {
+      bm: countBM,
+      sweetB: countSweetB,
+      jasons: countJason,
+    };
 
-  if (!isOpen) {
-    return null;
-  }
+    const salsasGratisRestantes = salsasGratisDisponibles - salsasGratisSeleccionadas;
+    const salsasAdicionalesGratis = Math.max(0, salsasGratisRestantes);
+    const salsasAdicionalesCosto = Math.max(0, salsasAdicionales - salsasAdicionalesGratis);
+
+    const costoTotal = costoSalsasExtras + salsasAdicionalesCosto * costoSalsasAdicionales;
+
+    // Actualizar las salsas correspondientes al producto
+    const updatedCartProducts = cartProducts.map((producto) => {
+      return {
+        ...producto,
+        salsas,
+      };
+    });
+    setCartProducts(updatedCartProducts);
+    onClose(); // Cerrar el modal
+    onSelectSalsas(salsas);
+    onContinue(); // Llamar a onContinue después de cerrar el modal
+  };
 
   return (
     <div className="modal fixed w-full h-full top-0 left-0 flex items-center justify-center">
@@ -39,7 +133,7 @@ const ModalSectionBajon = () => {
             <p className="text-2xl font-bold text-custom-yellow pb-4">Elige tu salsa</p>
             <div className="modal-close cursor-pointer  pb-4">
               <svg
-                onClick={closeModal}
+                onClick={onClose}
                 className="fill-current text-white"
                 xmlns="http://www.w3.org/2000/svg"
                 width="18"
@@ -162,23 +256,30 @@ const ModalSectionBajon = () => {
                 </p>
               </div>
             </div>
+
+            <div className="flex justify-between items-center py-2 text-sm font-bold text-gray-400">
+              <p>Salsas gratis disponibles: {salsasGratisSeleccionadas}</p>
+              <p>Costo salsas adicionales: ${costoSalsasExtras}</p>
+            </div>
+
             <div className="flex justify-center items-center pb-3">
               <button
-                className="
-                                bg-custom-yellow
-                                hover:bg-custom-yellow
-                                text-black
-                                font-bold
-                                py-2 w-full
-                                rounded
-                                focus:outline-none focus:shadow-outline
-                                "
-                onClick={openModalInfo}
+                className={`
+                  ${countBM + countSweetB + countJason > 5 ? 'bg-gray-400' : 'bg-custom-yellow'}
+                  hover:${countBM + countSweetB + countJason > 5 ? 'bg-gray-400' : 'bg-custom-yellow'}
+                  text-black
+                  font-bold
+                  py-2 w-full
+                  rounded
+                  focus:outline-none focus:shadow-outline
+                  ${countBM + countSweetB + countJason > 5 ? 'cursor-not-allowed' : 'cursor-pointer'}
+                `}
+                onClick={handleConfirm}
+                disabled={countBM + countSweetB + countJason >= 5 && salsasGratisDisponibles === salsasGratisSeleccionadas}
               >
                 Siguiente
               </button>
             </div>
-            {modalInfo && <ModalRequest />}
           </div>
         </div>
       </div>
