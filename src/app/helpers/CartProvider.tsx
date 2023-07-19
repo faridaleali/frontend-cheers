@@ -1,11 +1,10 @@
-'use client'
-
+'use client';
 import React, { createContext, useState, useContext } from 'react';
 import { Product } from "@/app/interfaces/products.interface";
 
 interface CartContextType {
     cart: Product[];
-    addToCart: (product: Product) => void;
+    addToCart: (product: Product, salsas?: { bm: number; sweetB: number; jasons: number }) => void;
     removeFromCart: (product: Product) => void;
     clearCart: () => void;
 }
@@ -20,7 +19,12 @@ export const CartContext = createContext<CartContextType>({
 export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [cart, setCart] = useState<Product[]>([]);
 
-    const addToCart = (product: Product) => {
+    const addToCart = (product: Product, salsas?: { bm: number; sweetB: number; jasons: number }) => {
+        if (salsas) {
+            console.log(salsas)
+            // Agrega las salsas seleccionadas al producto
+            product.salsas = salsas;
+        }
         setCart(currentCart => [...currentCart, product]);
     };
 

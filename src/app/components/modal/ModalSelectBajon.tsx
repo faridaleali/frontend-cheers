@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useCart } from '@/app/helpers/CartProvider';
-import { Product } from '@/app/interfaces/products.interface';
-
+import { Product, Salsas } from '@/app/interfaces/products.interface';
 interface ModalSelectBajonProps {
   isModalOpen: boolean;
   onClose: () => void;
-  onSelectSalsas: (salsas: { bm: number; sweetB: number; jasons: number }) => void;
+  onSelectSalsas: (salsas: Salsas) => void;
   onContinue: () => void;
+  productId: string | null; // Agregar la nueva propiedad aquí
 }
 
 const ModalSectionBajon: React.FC<ModalSelectBajonProps> = ({
@@ -14,8 +14,9 @@ const ModalSectionBajon: React.FC<ModalSelectBajonProps> = ({
   onClose,
   onSelectSalsas,
   onContinue,
+  productId, // <- Nueva propiedad para el producto seleccionado
 }) => {
-  const { cart } = useCart();
+  const { cart, addToCart } = useCart();
   const [cartProducts, setCartProducts] = useState<Product[]>(cart);
   const [countBM, setCountBM] = useState(0);
   const [countSweetB, setCountSweetB] = useState(0);
@@ -50,16 +51,18 @@ const ModalSectionBajon: React.FC<ModalSelectBajonProps> = ({
       }
     }
     const updatedCartProducts = cartProducts.map((producto) => {
-      return {
-        ...producto,
-        salsas: {
-          bm: countBM,
-          sweetB: countSweetB,
-          jasons: countJason,
-        },
-      };
+      if (producto.id === productId) { // <- Solo actualiza el producto seleccionado
+        return {
+          ...producto,
+          salsas: {
+            bm: countBM,
+            sweetB: countSweetB,
+            jasons: countJason,
+          },
+        };
+      }
+      return producto;
     });
-    console.log(updatedCartProducts)
     setCartProducts(updatedCartProducts);
   };
 
@@ -80,16 +83,18 @@ const ModalSectionBajon: React.FC<ModalSelectBajonProps> = ({
         setCostoSalsasExtras(salsasExtras * costoSalsasAdicionales);
       }
     }
-    // Actualizar las salsas correspondientes al producto
     const updatedCartProducts = cartProducts.map((producto) => {
-      return {
-        ...producto,
-        salsas: {
-          bm: countBM,
-          sweetB: countSweetB,
-          jasons: countJason,
-        },
-      };
+      if (producto.id === productId) { // <- Solo actualiza el producto seleccionado
+        return {
+          ...producto,
+          salsas: {
+            bm: countBM,
+            sweetB: countSweetB,
+            jasons: countJason,
+          },
+        };
+      }
+      return producto;
     });
     setCartProducts(updatedCartProducts);
   };
@@ -104,24 +109,32 @@ const ModalSectionBajon: React.FC<ModalSelectBajonProps> = ({
       sweetB: countSweetB,
       jasons: countJason,
     };
-
+  
     const salsasGratisRestantes = salsasGratisDisponibles - salsasGratisSeleccionadas;
     const salsasAdicionalesGratis = Math.max(0, salsasGratisRestantes);
     const salsasAdicionalesCosto = Math.max(0, salsasAdicionales - salsasAdicionalesGratis);
-
+  
     const costoTotal = costoSalsasExtras + salsasAdicionalesCosto * costoSalsasAdicionales;
-
+  
     // Actualizar las salsas correspondientes al producto
-    const updatedCartProducts = cartProducts.map((producto) => {
-      return {
+  const updatedCartProducts = cartProducts.map((producto) => {
+    if (producto.id === productId) { // Solo actualizas el producto seleccionado
+      const updatedProduct = {
         ...producto,
         salsas,
+        costoSalsas: costoTotal,
       };
-    });
-    setCartProducts(updatedCartProducts);
-    onClose(); // Cerrar el modal
-    onSelectSalsas(salsas);
-    onContinue(); // Llamar a onContinue después de cerrar el modal
+      setCartProducts([...cartProducts.filter(p => p.id !== productId), updatedProduct]);
+      console.log(updatedProduct)
+      addToCart(updatedProduct);
+    }
+    return producto; // Para el resto de los productos, no se modifica nada
+  });
+    
+  setCartProducts(updatedCartProducts);
+  onClose(); // Cerrar el modal
+  onSelectSalsas(salsas);
+  onContinue(); // Llamar a onContinue después de cerrar el modal
   };
 
   return (
