@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useCart } from '@/app/helpers/CartProvider';
 import { Product, Salsas } from '@/app/interfaces/products.interface';
+
 interface ModalSelectBajonProps {
   isModalOpen: boolean;
   onClose: () => void;
@@ -30,7 +31,7 @@ const ModalSectionBajon: React.FC<ModalSelectBajonProps> = ({
   useEffect(() => {
     setCartProducts(cart);
   }, [cart]);
-
+  
   const increaseCount = (setter: React.Dispatch<React.SetStateAction<number>>, count: number) => {
     const totalSalsas = countBM + countSweetB + countJason + 1;
 
@@ -84,7 +85,7 @@ const ModalSectionBajon: React.FC<ModalSelectBajonProps> = ({
       }
     }
     const updatedCartProducts = cartProducts.map((producto) => {
-      if (producto.id === productId) { // <- Solo actualiza el producto seleccionado
+      if (producto.id === productId) {
         return {
           ...producto,
           salsas: {
@@ -97,10 +98,6 @@ const ModalSectionBajon: React.FC<ModalSelectBajonProps> = ({
       return producto;
     });
     setCartProducts(updatedCartProducts);
-  };
-
-  const closeModal = () => {
-    onClose();
   };
 
   const handleConfirm = () => {
@@ -117,7 +114,7 @@ const ModalSectionBajon: React.FC<ModalSelectBajonProps> = ({
     const costoTotal = costoSalsasExtras + salsasAdicionalesCosto * costoSalsasAdicionales;
   
     // Actualizar las salsas correspondientes al producto
-  const updatedCartProducts = cartProducts.map((producto) => {
+    const updatedCartProducts = cartProducts.map((producto) => {
     if (producto.id === productId) { // Solo actualizas el producto seleccionado
       const updatedProduct = {
         ...producto,
@@ -128,7 +125,8 @@ const ModalSectionBajon: React.FC<ModalSelectBajonProps> = ({
       console.log(updatedProduct)
       addToCart(updatedProduct);
     }
-    return producto; // Para el resto de los productos, no se modifica nada
+    
+    return producto;
   });
     
   setCartProducts(updatedCartProducts);

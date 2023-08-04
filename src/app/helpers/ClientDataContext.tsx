@@ -7,6 +7,7 @@ type Cliente = {
   calle: string;
   numero: string;
   piso: string;
+  efectivo: string;
 };
 
 type ClientDataContextType = {
@@ -31,6 +32,7 @@ export const ClientDataProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     calle: '',
     numero: '',
     piso: '',
+    efectivo: ''
   });
 
   return (

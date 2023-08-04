@@ -1,6 +1,7 @@
 'use client'
 import { Product } from "@/app/interfaces/products.interface";
 import { useEffect, useState } from "react";
+import { CardProductProps } from '../../interfaces/products.interface';
 import CardProduct from "../card-products/CardProduct";
 import ModalSectionBajon from "../modal/ModalSelectBajon";
 import Productos from '../../../../api/entities/Productos';
@@ -16,6 +17,15 @@ export default function ProductsPage() {
 
   const productosService = new Productos(apiClient);
 
+  const handleOpenCart = () => {
+    setOpenModalSelectBajon(true)
+  }
+
+  const handleAddToCart = (product: Product) => {
+    setSelectedProductId(product.id);
+    setOpenModalSelectBajon(true);
+  };
+
   const handleContinue = () => {
     setOpenModalRequest(true);
     setOpenModalSelectBajon(false);
@@ -30,67 +40,81 @@ export default function ProductsPage() {
     fetchProductos();
   }, []);
 
-  const handleAddToCart = (product: Product) => {
-    setSelectedProductId(product.id);
-    setOpenModalSelectBajon(true);
-  };
-
   return (
-    <div className="p-4 bg-gray-100">
+    <div id="main-products" className="p-4 bg-gray-100">
       <h1 className="text-3xl sm:text-4xl md:text-3xl font-bold text-center text-gray-800 mb-4">
         ELIGE TU BAJÓN
       </h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-4 pb-4">
         {products.map((product, index) => (
-          <CardProduct key={index} product={product} onAddToCart={(event) => {
-            event.preventDefault();
-            handleAddToCart(product);
-          }} /> 
+          <div>
+            <CardProduct 
+              key={index} 
+              product={product} 
+              onAddToCart= {
+                (event) => {
+                  event.preventDefault();
+                  handleAddToCart(product);
+                }
+              }/>
+          </div>
         ))}
       </div>
 
-      <div className="flex items-center justify-center">
-        <button
-          className={`flex items-center justify-center px-4 py-2 md:px-8 md:py-4 mt-4 bg-custom-yellow text-black font-semibold rounded-full hover:bg-custom-yellow-hover transition-colors duration-300 
-          ${!selectedProductId ? 'opacity-50 cursor-not-allowed' : ''}`}
-          onClick={() => {
-            if(selectedProductId) {
-              setOpenModalSelectBajon(true)
-            } else {
-              // You could show a message to the user here
-              console.log("Please select a product first");
-            }
-          }}
-        >
-          <img
-            src="./cart-black.svg"
-            alt="Carrito de compras"
-            className="mr-2 h-6 w-auto"
-          />
-          <span className="text-sm md:text-lg">Agregar a mi pedido</span>
-        </button>
-      </div>
 
-      {summaryText && (
-        <p className="text-center text-gray-600 mt-2">{summaryText}</p>
+      {(
+        <div className="items-center justify-center">
+          <div className="flex items-center justify-center">
+            <button
+            className={`flex mt-5 ms-2 font-semibold rounded-full py-5 px-5 bg-custom-yellow text-gray-800 rounded hover:bg-amber-400 border-2 border-black relative transition-colors duration-200
+            `}
+            onClick={handleOpenCart}
+            >
+              
+            Selecciona las salsa
+            <img 
+              src="./salsa.svg"
+              alt="Carrito de compras"
+              className="ml-2 h-6 w-auto"
+            />
+            </button>
+          </div>
+        </div>
       )}
 
-      
-      {openModalSelectBajon && selectedProductId && (
+      {summaryText && (
+        <div className="mt-5 items-center justify-center">
+          <div className="text-center text-gray-600 mt-2">{summaryText}</div>
+        </div>
+      )}
+
+      {openModalSelectBajon &&
         <ModalSectionBajon
-          productId={selectedProductId}
-          isModalOpen={openModalSelectBajon}
+        productId={selectedProductId}
+        isModalOpen={openModalSelectBajon}
+        onClose={() => {
+          setSelectedProductId(null);
+          setOpenModalSelectBajon(false);
+        }}
+        onSelectSalsas={(salsas) => {
+          console.log('Salsas seleccionadas:', salsas);
+          setOpenModalRequest(true);
+        }}
+        onContinue={handleContinue}
+        />
+      }
+
+      {openModalRequest &&  (
+        <ModalRequest
+          isModalOpen={openModalRequest}
           onClose={() => {
-            setSelectedProductId(null);
-            setOpenModalSelectBajon(false);
-          }}
-          onSelectSalsas={(salsas) => {
-            console.log('Salsas seleccionadas:', salsas);
-            setOpenModalRequest(true);
+            setSelectedProductId(selectedProductId);
+            setOpenModalRequest(false);
           }}
           onContinue={handleContinue}
         />
       )}
+
     </div>
   );
 }

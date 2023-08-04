@@ -6,9 +6,9 @@ export interface Salsas {
   
  export interface Product {
     id: string;
-    title: string;
-    description: string;
-    price: number;
+    nombre: string;
+    descripcion: string;
+    precio: number;
     imageUrl: string;
     quantity: number;
     salsas?: Salsas; // Esta propiedad puede ser opcional si no todos los productos tienen salsas

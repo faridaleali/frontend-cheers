@@ -1,6 +1,14 @@
 import React, { useState } from 'react';
 import { useClientData } from "@/app/helpers/ClientDataContext";
 import DetalleCompleto from "../../components/detalle/detalle";
+
+// CODIGO NUEVO
+
+import Ordenar from '../../../../api/entities/Ordenar'; 
+import apiClient from '../../../../api/services/apiService';
+
+
+const ordenarService = new Ordenar(apiClient);
     
 interface ModalRequestProps {
   isModalOpen: boolean;
@@ -13,35 +21,59 @@ export default function ModalRequest({
   onClose,
   onContinue,
 }: ModalRequestProps) {
+
+  /* USE STATES */
+
   const [showDetalleCompleto, setShowDetalleCompleto] = useState(false);
-  const { clientData, setClientData } = useClientData();
   const [phoneNumberError, setPhoneNumberError] = useState("");
+  const { clientData, setClientData } = useClientData();
+  
+  /* POST PARA BACKEND */
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setShowDetalleCompleto(true);
-  };
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    field: string
-  ) => {
+    setShowDetalleCompleto(true);
+
+    /*fetch('http://localhost:8080/api/data', {
+      method: 'POST',
+      body: JSON.stringify(clientData)
+    })
+
+    .then((response) => response.json())
+    .then((data) => {
+      console.log('Respuesta del servidor:', data);
+    })
+    .catch((error) => {
+      console.error('Error al enviar el formulario:', error);
+    });*/
+
+    ordenarService.postOrdenar(clientData)
+      .then((data) => {
+        console.log("Datos enviados")
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error('Error al ordenar:', error);
+      });
+
+  }
+
+  const handleChange = ( e: React.ChangeEvent<HTMLInputElement>, field: string ) => {
     const value = e.target.value;
     if (field === 'telefono') {
-      // Validar formato de número de teléfono
-      const phoneNumberRegex = /^\d{0,10}$/; // Permitir hasta 10 dígitos numéricos
+      const phoneNumberRegex = /^\d{0,10}$/;
       if (!phoneNumberRegex.test(value)) {
         setPhoneNumberError("El número de teléfono debe tener hasta 10 dígitos.");
       } else {
         setPhoneNumberError("");
       }
     }
+
     setClientData({ ...clientData, [field]: value });
   };
 
-  const handleCompartirWhatsApp = () => {
-    setShowDetalleCompleto(true);
-  };
+  /* DOM */
 
   return (
     <div className="modal fixed w-full h-full top-0 left-0 flex items-center justify-center">
@@ -126,19 +158,54 @@ export default function ModalRequest({
                 />
               </label>
 
+              <div className='flex justify-between my-5 '>
+                <div className="flex items-center ms-3 pe-2">
+                  <span className="text-white">Efectivo </span>
+                  <input
+                  required
+                  id="bordered-radio-1" 
+                  type="radio" 
+                  value="1" 
+                  name="metodo-pago" 
+                  className="ms-4">
+                  </input>
+                </div>
+                <div className="flex items-center me-5 pe-5">
+                  <span className="text-white">Transferencia </span>
+                  <input  
+                  required
+                  id="bordered-radio-2" 
+                  type="radio" 
+                  value="2" 
+                  name="metodo-pago" 
+                  className="ms-5">
+                  </input>
+                </div>
+              </div>
+              <label className="flex flex-row m-auto justify-center mt-2">
+                <span className="flex flex-row text-white justify-center">Efectivo a pagar $$$</span>
+                <input
+                  className="form-input mt-1 text-center block w-full border-b-2 border-custom-yellow bg-transparent text-white outline-none"
+                  value={clientData.efectivo}
+                  placeholder='$1.500'
+                  onChange={(e) => handleChange(e, 'efectivo')}
+                  required
+                  type="text"
+                />
+              </label>
               <div className="flex justify-center pt-2">
                 <button
-                  className="px-4 my-6 bg-custom-yellow p-3 rounded-lg text-black hover:bg-custom-yellow hover:text-black mr-2"
+                  className="px-4 my-6 mt-5 bg-custom-yellow p-3 rounded-lg text-black hover:bg-custom-yellow hover:text-black mr-2"
                   type="submit"
-                  title="El pedido será enviado a Cheers"
-                  onClick={handleCompartirWhatsApp}
-                >
-                  Compartir pedido por WhatsApp
+                  title="El pedido será enviado a Cheers">
+                  Siguiente
                 </button>
               </div>
             </form>
           )}
-          {showDetalleCompleto && <DetalleCompleto />}
+
+          {showDetalleCompleto && <DetalleCompleto/>}
+
         </div>
       </div>
     </div>

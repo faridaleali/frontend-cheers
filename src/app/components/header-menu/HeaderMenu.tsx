@@ -101,7 +101,7 @@ export default function HeaderMenu() {
                         <li>
                             <Link
                                 className="text-gray-500 hover:text-gray-100 transition duration-300"
-                                href=""
+                                href="#about"
                             >
                                 Nosotros
                             </Link>
@@ -117,7 +117,7 @@ export default function HeaderMenu() {
                         <li>
                             <Link
                                 className="text-gray-500 hover:text-gray-100 transition duration-300"
-                                href=""
+                                href="#main-products"
                             >
                                 Call Cheers
                             </Link>

@@ -2,7 +2,7 @@ import Image from 'next/image';
 
 export default function About() {
   return (
-    <div className="flex flex-col justify-center">
+    <div id="about" className="flex flex-col justify-center">
       <div className="bg-white p-6 w-full flex flex-col items-center relative">
         <div className="flex flex-col md:flex-row md:items-center p-9">
           <Image src="/Nosotros.svg" alt="Nosotros" width={500} height={500} />
