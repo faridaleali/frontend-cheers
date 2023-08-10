@@ -4,7 +4,7 @@ class Productos {
     }
 
     async getProductos() {
-        const response = await this.apiService.get('/.productos');
+        const response = await this.apiService.get('/productos');
         return response.data;
     }
 }

@@ -2,6 +2,13 @@ import React, { useState } from 'react';
 import { useClientData } from "@/app/helpers/ClientDataContext";
 import DetalleCompleto from "../../components/detalle/detalle";
 
+// Productos
+import { Product } from '@/app/interfaces/products.interface';
+import { useCart } from "@/app/helpers/CartProvider";
+
+
+import { useOrderContext } from '../../helpers/OrderContext'
+
 // CODIGO NUEVO
 
 import Ordenar from '../../../../api/entities/Ordenar'; 
@@ -27,6 +34,19 @@ export default function ModalRequest({
   const [showDetalleCompleto, setShowDetalleCompleto] = useState(false);
   const [phoneNumberError, setPhoneNumberError] = useState("");
   const { clientData, setClientData } = useClientData();
+
+  // Revisar logica de esta funcion
+
+  const { cart } = useCart();
+
+  const groupedCart = cart.reduce((acc, product) => {
+    if (acc[product.id]) {
+      acc[product.id].quantity += 1
+    } else {
+      acc[product.id] = { ...product, quantity: 1};
+    }
+    return acc;
+  }, {} as { [key: string]: ProductWithQuantity });
   
   /* POST PARA BACKEND */
 
@@ -35,20 +55,22 @@ export default function ModalRequest({
 
     setShowDetalleCompleto(true);
 
-    /*fetch('http://localhost:8080/api/data', {
-      method: 'POST',
-      body: JSON.stringify(clientData)
+    const totalProductos = Object.values(groupedCart).reduce(
+      (acc, product) => acc + product.quantity,
+      0
+    );
+
+    const productos = cart.map((producto, index) => {
+      return producto.nombre
     })
 
-    .then((response) => response.json())
-    .then((data) => {
-      console.log('Respuesta del servidor:', data);
+    const salsas = cart.map((producto, index) => {
+      return producto.salsas
     })
-    .catch((error) => {
-      console.error('Error al enviar el formulario:', error);
-    });*/
 
-    ordenarService.postOrdenar(clientData)
+    const updatedClientData = { ...clientData, products: productos, quantity: totalProductos, salsas: salsas };
+      
+    ordenarService.postOrdenar(updatedClientData)
       .then((data) => {
         console.log("Datos enviados")
         console.log(data);
@@ -56,7 +78,6 @@ export default function ModalRequest({
       .catch((error) => {
         console.error('Error al ordenar:', error);
       });
-
   }
 
   const handleChange = ( e: React.ChangeEvent<HTMLInputElement>, field: string ) => {
@@ -210,4 +231,8 @@ export default function ModalRequest({
       </div>
     </div>
   );
+}
+
+interface ProductWithQuantity extends Product {
+  quantity: number
 }

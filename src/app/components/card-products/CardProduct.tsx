@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { useCart } from '@/app/helpers/CartProvider';
 import { CardProductProps } from '../../interfaces/products.interface';
+import Image from 'next/image'
 
 export default function CardProduct({ product, onAddToCart }: CardProductProps) {
   const { addToCart, removeFromCart } = useCart();
@@ -25,10 +26,12 @@ export default function CardProduct({ product, onAddToCart }: CardProductProps) 
 
   return (
     <div className="flex flex-col justify-between p-5 w-full bg-white text-gray-800 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
-      <img
+      <Image
         src={product.imageUrl}
         alt="Product"
         className="w-full h-64 object-cover object-center rounded-t-lg"
+        width={100}
+        height={100}
       />
       <div className="flex justify-between items-center w-full pt-4">
         <h1 className="text-xl font-bold">{product.nombre}</h1>

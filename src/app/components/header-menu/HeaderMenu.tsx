@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import Logo from "../logo/Logo";
+import Image from "next/image";
 
 export default function HeaderMenu() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -27,7 +28,7 @@ export default function HeaderMenu() {
             >
                 <div className="flex flex-col items-center justify-between p-8 h-screen w-3/4">
                     <div className="flex flex-col w-full">
-                        <img src="./roundLogo.svg" alt="logo" width={80} />
+                        <Image src="./roundLogo.svg" alt="logo" width={80} height={80} />
                     </div>
                     <ul className="flex flex-col space-y-4 w-full">
                         <li className="border-b border-gray-200">
@@ -64,7 +65,7 @@ export default function HeaderMenu() {
                                     rel="noopener noreferrer"
                                     className="text-white hover:text-gray-800 transition duration-300"
                                 >
-                                    <img src="/whatsappy.svg" alt="whatsapp" width={24} height={24} />
+                                    <Image src="/whatsappy.svg" alt="whatsapp" width={24} height={24} />
                                 </a>
                             </li>
                             <li>
@@ -74,7 +75,7 @@ export default function HeaderMenu() {
                                     rel="noopener noreferrer"
                                     className="text-white hover:text-gray-800 transition duration-300"
                                 >
-                                    <img src="/instagramy.svg" alt="instagram" width={24} height={24} />
+                                    <Image src="/instagramy.svg" alt="instagram" width={24} height={24} />
                                 </a>
                             </li>
                             <li>
@@ -84,7 +85,7 @@ export default function HeaderMenu() {
                                     rel="noopener noreferrer"
                                     className="text-white hover:text-gray-800 transition duration-300"
                                 >
-                                    <img src="/facebooky.svg" alt="facebook" width={12} height={12} />
+                                    <Image src="/facebooky.svg" alt="facebook" width={12} height={12} />
                                 </a>
                             </li>
                         </ul>

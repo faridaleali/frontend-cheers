@@ -3,7 +3,7 @@ import React, { createContext, useContext, useState } from 'react';
 
 // Definimos el tipo de los datos del pedido de pollo frito con salsas
 type ChickenOrder = {
-  product: any; // Aquí deberías especificar el tipo de dato correcto para el producto
+  product: string; // Aquí deberías especificar el tipo de dato correcto para el producto
   quantity: number;
   salsas: {
     bm: number;

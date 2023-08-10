@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const apiClient = axios.create({
-  baseURL: 'https://cheers.noproblem.com.ar',
+  baseURL: 'http://localhost:9000/api',
 });
 
 export default apiClient;

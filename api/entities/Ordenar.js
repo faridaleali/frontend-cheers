@@ -4,7 +4,7 @@ class Ordenar {
     }
 
     async postOrdenar(data) {
-        const response = await this.apiService.post('/.ordenar', data);
+        const response = await this.apiService.post('/ordenes', data);
         return response.data;
     }
 }

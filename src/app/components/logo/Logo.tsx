@@ -1,7 +1,9 @@
+import Image from "next/image"
+
 export default function Logo() {
     return (
         <div>
-            <img src="./Logo.svg" alt="logo" width={120} />
+            <Image src="./Logo.svg" alt="logo" width={120} height={120} />
         </div>
     )
 }

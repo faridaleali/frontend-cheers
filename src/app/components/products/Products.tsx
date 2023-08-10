@@ -47,17 +47,10 @@ export default function ProductsPage() {
       </h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-4 pb-4">
         {products.map((product, index) => (
-          <div>
-            <CardProduct 
-              key={index} 
-              product={product} 
-              onAddToCart= {
-                (event) => {
-                  event.preventDefault();
-                  handleAddToCart(product);
-                }
-              }/>
-          </div>
+          <CardProduct key={product.id} product={product} onAddToCart= {(event) => {
+              event.preventDefault();
+              handleAddToCart(product);
+          }}/>
         ))}
       </div>
 

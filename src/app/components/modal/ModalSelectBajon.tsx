@@ -130,9 +130,9 @@ const ModalSectionBajon: React.FC<ModalSelectBajonProps> = ({
   });
     
   setCartProducts(updatedCartProducts);
-  onClose(); // Cerrar el modal
+  onClose();
   onSelectSalsas(salsas);
-  onContinue(); // Llamar a onContinue después de cerrar el modal
+  onContinue();
   };
 
   return (
