@@ -2,7 +2,7 @@ import Image from 'next/image';
 
 export default function Footer() {
   return (
-    <footer className="bg-black text-center py-6 text-white">
+    <div className="bg-black text-center py-6 text-white">
       <div className="bg-custom-yellow py-2">
         <p className="text-sm text-black font-bold uppercase">Matando el bajón est.2023</p>
       </div>
@@ -12,6 +12,6 @@ export default function Footer() {
       <p className="text-sm">
         © Cheer’s pollo frito - {new Date().getFullYear()}
       </p>
-    </footer>
+    </div>
   );
 }

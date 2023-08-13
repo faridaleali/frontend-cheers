@@ -6,14 +6,10 @@ import DetalleCompleto from "../../components/detalle/detalle";
 import { Product } from '@/app/interfaces/products.interface';
 import { useCart } from "@/app/helpers/CartProvider";
 
-
-import { useOrderContext } from '../../helpers/OrderContext'
-
 // CODIGO NUEVO
 
 import Ordenar from '../../../../api/entities/Ordenar'; 
 import apiClient from '../../../../api/services/apiService';
-
 
 const ordenarService = new Ordenar(apiClient);
     
@@ -33,11 +29,12 @@ export default function ModalRequest({
 
   const [showDetalleCompleto, setShowDetalleCompleto] = useState(false);
   const [phoneNumberError, setPhoneNumberError] = useState("");
+  const [selectedOption, setSelectedOption] = useState<string>('efectivo');
+
+  const { cart } = useCart();
   const { clientData, setClientData } = useClientData();
 
   // Revisar logica de esta funcion
-
-  const { cart } = useCart();
 
   const groupedCart = cart.reduce((acc, product) => {
     if (acc[product.id]) {
@@ -53,27 +50,26 @@ export default function ModalRequest({
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    setShowDetalleCompleto(true);
+    const totalProductos = Object.values(groupedCart).reduce( (acc, product) => acc + product.quantity, 0);
 
-    const totalProductos = Object.values(groupedCart).reduce(
-      (acc, product) => acc + product.quantity,
-      0
-    );
+    const productos = cart.map((producto, index) => producto.nombre)
 
-    const productos = cart.map((producto, index) => {
-      return producto.nombre
-    })
+    const salsasNombres = {
+      bm: cart.map((producto) => console.log(producto.salsas?.bm)),
+      jasons: cart.map((producto) => console.log(producto.salsas?.jasons)),
+      sweetB: cart.map((producto) => console.log(producto.salsas?.sweetB))
+    }
 
-    const salsas = cart.map((producto, index) => {
-      return producto.salsas
-    })
+    salsasNombres
 
-    const updatedClientData = { ...clientData, products: productos, quantity: totalProductos, salsas: salsas };
+    const updatedClientData = { ...clientData, pago: selectedOption, products: productos, quantity: totalProductos, salsas: 0 };
       
     ordenarService.postOrdenar(updatedClientData)
       .then((data) => {
         console.log("Datos enviados")
         console.log(data);
+        
+        setShowDetalleCompleto(true);
       })
       .catch((error) => {
         console.error('Error al ordenar:', error);
@@ -90,6 +86,8 @@ export default function ModalRequest({
         setPhoneNumberError("");
       }
     }
+
+    setSelectedOption(field === 'efectivo' ? 'efectivo' : 'transferencia');
 
     setClientData({ ...clientData, [field]: value });
   };
@@ -181,24 +179,28 @@ export default function ModalRequest({
 
               <div className='flex justify-between my-5 '>
                 <div className="flex items-center ms-3 pe-2">
-                  <span className="text-white">Efectivo </span>
+                  <label htmlFor="bordered-radio-1" className="text-white">Efectivo </label>
                   <input
                   required
                   id="bordered-radio-1" 
                   type="radio" 
-                  value="1" 
+                  value= "efectivo"
+                  checked={selectedOption === 'efectivo'}
+                  onChange={(e) => handleChange(e, 'efectivo')} 
                   name="metodo-pago" 
                   className="ms-4">
                   </input>
                 </div>
                 <div className="flex items-center me-5 pe-5">
-                  <span className="text-white">Transferencia </span>
+                  <label htmlFor="bordered-radio-2" className="text-white"> Transferencia </label>
                   <input  
                   required
                   id="bordered-radio-2" 
                   type="radio" 
-                  value="2" 
-                  name="metodo-pago" 
+                  value="transferencia"
+                  checked={selectedOption === 'transferencia'}
+                  onChange={(e) => handleChange(e, 'transferencia')}
+                  name="metodo-pago"
                   className="ms-5">
                   </input>
                 </div>
@@ -206,11 +208,9 @@ export default function ModalRequest({
               <label className="flex flex-row m-auto justify-center mt-2">
                 <span className="flex flex-row text-white justify-center">Efectivo a pagar $$$</span>
                 <input
-                  className="form-input mt-1 text-center block w-full border-b-2 border-custom-yellow bg-transparent text-white outline-none"
-                  value={clientData.efectivo}
+                  className={`form-input mt-1 text-center block w-full border-b-2 border-custom-yellow bg-transparent text-white outline-none
+                  ${selectedOption === 'efectivo' ? 'border border-green-500' : 'border border-red-500 cursor-not-allowed'}`}
                   placeholder='$1.500'
-                  onChange={(e) => handleChange(e, 'efectivo')}
-                  required
                   type="text"
                 />
               </label>

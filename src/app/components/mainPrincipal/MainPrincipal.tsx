@@ -24,8 +24,10 @@ export default function MainPrincipal() {
                         <About />
                         <Banner />
                         <ProductsPage />
-                        <Footer />
                     </main>
+                    <footer>
+                        <Footer />
+                    </footer>
                 </div>
             </CartProvider>
         </ClientDataProvider>

@@ -22,7 +22,19 @@ const ModalSectionBajon: React.FC<ModalSelectBajonProps> = ({
   const [countBM, setCountBM] = useState(0);
   const [countSweetB, setCountSweetB] = useState(0);
   const [countJason, setCountJason] = useState(0);
-  const salsasGratisDisponibles = 2;
+
+  const groupedCart = cart.reduce((acc, product) => {
+    if (acc[product.id]) {
+      acc[product.id].quantity += 1
+    } else {
+      acc[product.id] = { ...product, quantity: 1};
+    }
+    return acc;
+  }, {} as { [key: string]: ProductWithQuantity });
+
+  const totalProductos = Object.values(groupedCart).reduce( (acc, product) => acc + product.quantity, 0);
+  
+  const salsasGratisDisponibles = 2 * parseInt(totalProductos.toString(), 10);
   const [salsasAdicionales, setSalsasAdicionales] = useState(0);
   const costoSalsasAdicionales = 100;
   const [costoSalsasExtras, setCostoSalsasExtras] = useState(0);
@@ -297,5 +309,9 @@ const ModalSectionBajon: React.FC<ModalSelectBajonProps> = ({
     </div>
   );
 };
+
+interface ProductWithQuantity extends Product {
+  quantity: number
+}
 
 export default ModalSectionBajon;
