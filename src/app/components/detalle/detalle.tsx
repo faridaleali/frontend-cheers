@@ -72,16 +72,17 @@ const DetalleCompleto = () => {
 
   return (
     <div className="bg-black h-full text-white p-0">
-      <h2 className="text-2xl font-bold text-center mb-4">Detalle del Pedido</h2>
+      <h2 className="text-2xl font-bold text-center mb-2">Pedido enviado ✅</h2>
+      <h3 className=" font-bold text-center mb-1">Detalle del Pedido</h3>
       <hr className="border-white mb-4" />
       
       <div>
-        <h3 className="text-xl font-bold">Datos del Cliente</h3>
-        <p className="mb-2">Nombre y Apellido: {clientData.nombre}</p>
-        <p className="mb-2">Teléfono: {clientData.telefono}</p>
-        <p className="mb-2">Calle: {clientData.calle}</p>
-        <p className="mb-2">Número: {clientData.numero}</p>
-        <p className="mb-4">Piso: {clientData.piso}</p>
+        <h3 className="text-xl font-bold mb-1">Datos del Cliente</h3>
+        <p className="mb-1">Nombre y Apellido: {clientData.nombre}</p>
+        <p className="mb-1">Teléfono: {clientData.telefono}</p>
+        <p className="mb-1">Calle: {clientData.calle}</p>
+        <p className="mb-1">Número: {clientData.numero}</p>
+        <p className="mb-3">Piso: {clientData.piso}</p>
       </div>
 
       <div>
@@ -101,7 +102,7 @@ const DetalleCompleto = () => {
       </div>
       <div className='flex justify-center'>
         <button className="flex mt-5 text-black font-semibold rounded-md bg-yellow-400 p-4" id="btnEnviarPedido" onClick={handleEnviarPedido}>
-          Enviar pedido y confirmar en WP
+          Seguir el pedido por WP
           <Image
             src="./whatsapp.svg" 
             alt="Whatsapp" 

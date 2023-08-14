@@ -60,6 +60,18 @@ export default function CardProduct({ product, onAddToCart }: CardProductProps) 
             +
           </button>
         </div>
+        <div onClick={onAddToCart} className="flex flex-row py-2 ps-2 bg-custom-yellow text-gray-800 rounded hover:bg-custom-yellow-hover transition-colors duration-300 relative rounded-full font-semibold border-2 border-black cursor-pointer">Salsas
+          <img 
+            src="./salsa.svg" 
+            alt="Add to Cart" 
+            className="px-2 h-6 w-auto"
+          />
+          {quantity > 0 && (
+            <span className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center">
+              {quantity}
+            </span>
+          )}
+        </div>
       </div>
     </div>
   );

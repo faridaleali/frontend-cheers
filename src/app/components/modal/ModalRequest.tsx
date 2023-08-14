@@ -55,14 +55,12 @@ export default function ModalRequest({
     const productos = cart.map((producto, index) => producto.nombre)
 
     const salsasNombres = {
-      bm: cart.map((producto) => console.log(producto.salsas?.bm)),
-      jasons: cart.map((producto) => console.log(producto.salsas?.jasons)),
-      sweetB: cart.map((producto) => console.log(producto.salsas?.sweetB))
-    }
+      bm: cart.map((producto) => producto.salsas?.bm),
+      jasons: cart.map((producto) => producto.salsas?.jasons),
+      sweetB: cart.map((producto) => producto.salsas?.sweetB),
+    };
 
-    salsasNombres
-
-    const updatedClientData = { ...clientData, pago: selectedOption, products: productos, quantity: totalProductos, salsas: 0 };
+    const updatedClientData = { ...clientData, pago: selectedOption, products: productos, quantity: totalProductos, salsas: salsasNombres}
       
     ordenarService.postOrdenar(updatedClientData)
       .then((data) => {
@@ -88,7 +86,6 @@ export default function ModalRequest({
     }
 
     setSelectedOption(field === 'efectivo' ? 'efectivo' : 'transferencia');
-
     setClientData({ ...clientData, [field]: value });
   };
 
@@ -219,7 +216,7 @@ export default function ModalRequest({
                   className="px-4 my-6 mt-5 bg-custom-yellow p-3 rounded-lg text-black hover:bg-custom-yellow hover:text-black mr-2"
                   type="submit"
                   title="El pedido será enviado a Cheers">
-                  Siguiente
+                  Enviar el pedido
                 </button>
               </div>
             </form>

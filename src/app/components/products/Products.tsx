@@ -1,7 +1,6 @@
 'use client'
 import { Product } from "@/app/interfaces/products.interface";
 import { useEffect, useState } from "react";
-import { CardProductProps } from '../../interfaces/products.interface';
 import CardProduct from "../card-products/CardProduct";
 import ModalSectionBajon from "../modal/ModalSelectBajon";
 import Productos from '../../../../api/entities/Productos';
@@ -14,6 +13,10 @@ export default function ProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
   const [summaryText, setSummaryText] = useState("");
+
+  /*const [countBM, setCountBM] = useState(0);
+  const [countSweetB, setCountSweetB] = useState(0);
+  const [countJason, setCountJason] = useState(0);*/
 
   const productosService = new Productos(apiClient);
 
@@ -40,6 +43,32 @@ export default function ProductsPage() {
     fetchProductos();
   }, []);
 
+  /*const handleConfirm = () => {
+
+    const updatedCartProducts = cartProducts.map((producto) => {
+      if (producto.id === selectedProductId) {
+        const updatedProduct = {
+          ...producto,
+          salsas: {
+            bm: countBM,
+            sweetB: countSweetB,
+            jasons: countJason,
+          },
+          costoSalsas: 1200,
+        };
+        setCartProducts([...cartProducts.filter(p => p.id !== selectedProductId), updatedProduct]);
+        console.log(updatedProduct)
+        addToCart(updatedProduct);
+      }
+      
+      return producto;
+    });
+
+    setCartProducts(updatedCartProducts);
+    handleContinue();
+  }*/
+    
+
   return (
     <div id="main-products" className="p-4 bg-gray-100">
       <h1 className="text-3xl sm:text-4xl md:text-3xl font-bold text-center text-gray-800 mb-4">
@@ -54,19 +83,17 @@ export default function ProductsPage() {
         ))}
       </div>
 
-
       {(
         <div className="items-center justify-center">
           <div className="flex items-center justify-center">
             <button
-            className={`flex mt-5 ms-2 font-semibold rounded-full py-5 px-5 bg-custom-yellow text-gray-800 rounded hover:bg-amber-400 border-2 border-black relative transition-colors duration-200
-            `}
+            className={`flex mt-5 ms-2 font-semibold rounded-full py-5 px-5 bg-custom-yellow text-gray-800 rounded hover:bg-amber-400 border-2 border-black relative transition-colors duration-200`}
             onClick={handleOpenCart}
+            //onClick={handleConfirm}
             >
-              
-            Selecciona las salsa
+            Continuar
             <img 
-              src="./salsa.svg"
+              src="./cart-black.svg"
               alt="Carrito de compras"
               className="ml-2 h-6 w-auto"
             />
@@ -107,7 +134,6 @@ export default function ProductsPage() {
           onContinue={handleContinue}
         />
       )}
-
     </div>
   );
 }

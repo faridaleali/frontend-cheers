@@ -23,7 +23,7 @@ const ModalSectionBajon: React.FC<ModalSelectBajonProps> = ({
   const [countSweetB, setCountSweetB] = useState(0);
   const [countJason, setCountJason] = useState(0);
 
-  const groupedCart = cart.reduce((acc, product) => {
+  /*const groupedCart = cart.reduce((acc, product) => {
     if (acc[product.id]) {
       acc[product.id].quantity += 1
     } else {
@@ -32,9 +32,9 @@ const ModalSectionBajon: React.FC<ModalSelectBajonProps> = ({
     return acc;
   }, {} as { [key: string]: ProductWithQuantity });
 
-  const totalProductos = Object.values(groupedCart).reduce( (acc, product) => acc + product.quantity, 0);
+  const totalProductos = Object.values(groupedCart).reduce( (acc, product) => acc + product.quantity, 0);*/
   
-  const salsasGratisDisponibles = 2 * parseInt(totalProductos.toString(), 10);
+  const salsasGratisDisponibles = 2 /* parseInt(totalProductos.toString(), 10);*/
   const [salsasAdicionales, setSalsasAdicionales] = useState(0);
   const costoSalsasAdicionales = 100;
   const [costoSalsasExtras, setCostoSalsasExtras] = useState(0);
@@ -137,6 +137,10 @@ const ModalSectionBajon: React.FC<ModalSelectBajonProps> = ({
       console.log(updatedProduct)
       addToCart(updatedProduct);
     }
+
+    console.log(countBM)
+    console.log(countSweetB)
+    console.log(countJason)
     
     return producto;
   });
