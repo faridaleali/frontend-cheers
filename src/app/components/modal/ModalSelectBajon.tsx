@@ -23,7 +23,7 @@ const ModalSectionBajon: React.FC<ModalSelectBajonProps> = ({
   const [countSweetB, setCountSweetB] = useState(0);
   const [countJason, setCountJason] = useState(0);
 
-  /*const groupedCart = cart.reduce((acc, product) => {
+  const groupedCart = cart.reduce((acc, product) => {
     if (acc[product.id]) {
       acc[product.id].quantity += 1
     } else {
@@ -32,9 +32,9 @@ const ModalSectionBajon: React.FC<ModalSelectBajonProps> = ({
     return acc;
   }, {} as { [key: string]: ProductWithQuantity });
 
-  const totalProductos = Object.values(groupedCart).reduce( (acc, product) => acc + product.quantity, 0);*/
+  const totalProductos = Object.values(groupedCart).reduce( (acc, product) => acc + product.quantity, 0);
   
-  const salsasGratisDisponibles = 2 /* parseInt(totalProductos.toString(), 10);*/
+  const salsasGratisDisponibles = 2 * parseInt(totalProductos.toString(), 10);
   const [salsasAdicionales, setSalsasAdicionales] = useState(0);
   const costoSalsasAdicionales = 100;
   const [costoSalsasExtras, setCostoSalsasExtras] = useState(0);
@@ -63,6 +63,7 @@ const ModalSectionBajon: React.FC<ModalSelectBajonProps> = ({
         setSalsasGratisSeleccionadas(0);
       }
     }
+    
     const updatedCartProducts = cartProducts.map((producto) => {
       if (producto.id === productId) { // <- Solo actualiza el producto seleccionado
         return {
@@ -76,12 +77,14 @@ const ModalSectionBajon: React.FC<ModalSelectBajonProps> = ({
       }
       return producto;
     });
+    console.log(updatedCartProducts)
     setCartProducts(updatedCartProducts);
   };
 
   const decreaseCount = (setter: React.Dispatch<React.SetStateAction<number>>, count: number) => {
     if (count > 0) {
       setter(count - 1);
+      
       const totalSalsas = countBM + countSweetB + countJason - 1;
       if (totalSalsas < salsasGratisDisponibles) {
         setSalsasGratisSeleccionadas(salsasGratisDisponibles - totalSalsas);
@@ -135,13 +138,14 @@ const ModalSectionBajon: React.FC<ModalSelectBajonProps> = ({
       };
       setCartProducts([...cartProducts.filter(p => p.id !== productId), updatedProduct]);
       console.log(updatedProduct)
+      console.log("No paso nada")
       addToCart(updatedProduct);
     }
 
     console.log(countBM)
     console.log(countSweetB)
     console.log(countJason)
-    
+
     return producto;
   });
     
@@ -177,13 +181,13 @@ const ModalSectionBajon: React.FC<ModalSelectBajonProps> = ({
                 <button
                   onClick={() => decreaseCount(setCountBM, countBM)}
                   className="
-                                        mr-2 bg-gray-600 
-                                        hover:bg-gray-700
-                                        text-white
-                                        font-bold
-                                        py-1 px-2
-                                        rounded
-                                        focus:outline-none focus:shadow-outline"
+                    mr-2 bg-gray-600 
+                    hover:bg-gray-700
+                    text-white
+                    font-bold
+                    py-1 px-2
+                    rounded
+                    focus:outline-none focus:shadow-outline"
                 >
                   -
                 </button>
@@ -191,12 +195,12 @@ const ModalSectionBajon: React.FC<ModalSelectBajonProps> = ({
                 <button
                   onClick={() => increaseCount(setCountBM, countBM)}
                   className="mr-2 bg-custom-yellow 
-                                    hover:bg-custom-yellow
-                                    text-black
-                                    font-bold
-                                    py-1 px-2
-                                    rounded
-                                    focus:outline-none focus:shadow-outline"
+                  hover:bg-custom-yellow
+                  text-black
+                  font-bold
+                  py-1 px-2
+                  rounded
+                  focus:outline-none focus:shadow-outline"
                 >
                   +
                 </button>
@@ -214,14 +218,14 @@ const ModalSectionBajon: React.FC<ModalSelectBajonProps> = ({
                 <button
                   onClick={() => decreaseCount(setCountSweetB, countSweetB)}
                   className="
-                                mr-2 bg-gray-600 
-                                hover:bg-gray-700
-                                text-white
-                                font-bold
-                                py-1 
-                                px-2
-                                rounded
-                                focus:outline-none focus:shadow-outline"
+                  mr-2 bg-gray-600 
+                  hover:bg-gray-700
+                  text-white
+                  font-bold
+                  py-1 
+                  px-2
+                  rounded
+                  focus:outline-none focus:shadow-outline"
                 >
                   -
                 </button>
@@ -229,12 +233,12 @@ const ModalSectionBajon: React.FC<ModalSelectBajonProps> = ({
                 <button
                   onClick={() => increaseCount(setCountSweetB, countSweetB)}
                   className="mr-2 bg-custom-yellow 
-                                     hover:bg-custom-yellow
-                                     text-black
-                                     font-bold
-                                     py-1 px-2
-                                     rounded
-                                     focus:outline-none focus:shadow-outline"
+                  hover:bg-custom-yellow
+                  text-black
+                  font-bold
+                  py-1 px-2
+                  rounded
+                  focus:outline-none focus:shadow-outline"
                 >
                   +
                 </button>
@@ -252,13 +256,13 @@ const ModalSectionBajon: React.FC<ModalSelectBajonProps> = ({
                 <button
                   onClick={() => decreaseCount(setCountJason, countJason)}
                   className="
-                                mr-2 bg-gray-600 
-                                hover:bg-gray-700
-                                text-white
-                                font-bold
-                                py-1 px-2
-                                rounded
-                                focus:outline-none focus:shadow-outline"
+                  mr-2 bg-gray-600 
+                  hover:bg-gray-700
+                  text-white
+                  font-bold
+                  py-1 px-2
+                  rounded
+                  focus:outline-none focus:shadow-outline"
                 >
                   -
                 </button>
@@ -277,7 +281,7 @@ const ModalSectionBajon: React.FC<ModalSelectBajonProps> = ({
                 </button>
               </div>
               <div>
-                <h3 className="text-lg font-bold text-custom-yellow">Jason´s</h3>
+                <h3 className="text-lg font-bold text-custom-yellow">Jason's</h3>
                 <p className="text-sm text-gray-200">
                   Mayonesa y Barbacoa. Es un toque picantita!. Guarda!
                 </p>

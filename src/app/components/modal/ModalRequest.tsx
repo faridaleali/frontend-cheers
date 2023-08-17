@@ -60,10 +60,16 @@ export default function ModalRequest({
       sweetB: cart.map((producto) => producto.salsas?.sweetB),
     };
 
-    const updatedClientData = { ...clientData, pago: selectedOption, products: productos, quantity: totalProductos, salsas: salsasNombres}
+    const salsaCostos = cart.map((producto, index) => producto.costoSalsas)
+
+    console.log(salsaCostos)
+    console.log(cart)
+
+    const updatedClientData = { ...clientData, pago: selectedOption, products: productos, quantity: totalProductos}
       
     ordenarService.postOrdenar(updatedClientData)
       .then((data) => {
+        
         console.log("Datos enviados")
         console.log(data);
         
@@ -216,7 +222,7 @@ export default function ModalRequest({
                   className="px-4 my-6 mt-5 bg-custom-yellow p-3 rounded-lg text-black hover:bg-custom-yellow hover:text-black mr-2"
                   type="submit"
                   title="El pedido será enviado a Cheers">
-                  Enviar el pedido
+                  Enviar el pedido y ver detalle
                 </button>
               </div>
             </form>

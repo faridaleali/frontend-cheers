@@ -1,28 +1,35 @@
-'use client'
-import { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useCart } from '@/app/helpers/CartProvider';
 import { CardProductProps } from '../../interfaces/products.interface';
 import Image from 'next/image'
 
-export default function CardProduct({ product, onAddToCart }: CardProductProps) {
+function CardProduct({ product, onAddToCart }: CardProductProps) {
   const { addToCart, removeFromCart } = useCart();
   const [quantity, setQuantity] = useState(0);
+  const [carritoIdCounter, setCarritoIdCounter] = useState(1);
 
-  const increaseQuantity = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    if(quantity >= 2) {
-      return setQuantity(quantity);
+  const salsas =  {
+    bm: 0,
+    sweetB: 0,
+    jasons: 0
+  }
+
+  const increaseQuantity = useCallback(() => {
+    if (quantity < 2) {
+      setQuantity(quantity + 1);
+      addToCart(product, salsas, carritoIdCounter);
+      setCarritoIdCounter(carritoIdCounter + 1); // Incrementar el contador
     }
+  }, [addToCart, product, quantity, carritoIdCounter]);
 
-    setQuantity(quantity + 1);
-    addToCart(product);
-  };
-
-  const decreaseQuantity = () => {
+  const decreaseQuantity = useCallback(() => {
     if (quantity > 0) {
       setQuantity(quantity - 1);
-      removeFromCart(product);
+      if (product.id) {
+        removeFromCart(product);
+      }
     }
-  };
+  }, [product, quantity, removeFromCart]);
 
   return (
     <div className="flex flex-col justify-between p-5 w-full bg-white text-gray-800 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
@@ -60,19 +67,9 @@ export default function CardProduct({ product, onAddToCart }: CardProductProps) 
             +
           </button>
         </div>
-        <div onClick={onAddToCart} className="flex flex-row py-2 ps-2 bg-custom-yellow text-gray-800 rounded hover:bg-custom-yellow-hover transition-colors duration-300 relative rounded-full font-semibold border-2 border-black cursor-pointer">Salsas
-          <img 
-            src="./salsa.svg" 
-            alt="Add to Cart" 
-            className="px-2 h-6 w-auto"
-          />
-          {quantity > 0 && (
-            <span className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center">
-              {quantity}
-            </span>
-          )}
-        </div>
       </div>
     </div>
   );
 }
+
+export default React.memo(CardProduct);

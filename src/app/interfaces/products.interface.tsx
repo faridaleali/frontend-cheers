@@ -11,8 +11,9 @@ export interface Salsas {
     precio: number;
     imageUrl: string;
     quantity: number;
-    salsas?: Salsas; // Esta propiedad puede ser opcional si no todos los productos tienen salsas
-    costoSalsas?: number; // Esta propiedad puede ser opcional si no todos los productos tienen costoSalsas
+    salsas: Salsas;
+    costoSalsas: number;
+    carritoId: number;
   }
   
 // Usar la interfaz en tu componente CardProduct
