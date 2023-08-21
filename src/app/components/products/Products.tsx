@@ -2,7 +2,6 @@
 import { Product } from "@/app/interfaces/products.interface";
 import { useEffect, useState } from "react";
 import CardProduct from "../card-products/CardProduct";
-import ModalSectionBajon from "../modal/ModalSelectBajon";
 import Productos from '../../../../api/entities/Productos';
 import apiClient from "../../../../api/services/apiService";
 import ModalRequest from "../modal/ModalRequest";
@@ -13,13 +12,11 @@ export default function ProductsPage() {
   const [openModalRequest, setOpenModalRequest] = useState(false);
   const [openModalSelectBajon, setOpenModalSelectBajon] = useState(false);
   const [products, setProducts] = useState<Product[]>([]);
-  const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
+  const [selectedProductId, setSelectedProductId] = useState<any | null>(null);
   const [summaryText, setSummaryText] = useState("");
-  const { cart, addToCart } = useCart();
+  const { cart } = useCart();
 
   const productosService = new Productos(apiClient);
-
-  const handleOpenCart = () => cart.length > 0 && setOpenModalSelectBajon(true);
 
   const handleAddToCart = (product: Product) => {
     setSelectedProductId(product.id);
@@ -29,7 +26,10 @@ export default function ProductsPage() {
   const handleContinue = () => {
     setOpenModalRequest(true);
     setOpenModalSelectBajon(false);
-    setSummaryText("¡Salsas seleccionadas con éxito!");
+  };
+
+  const handleDeniend = () => {
+    setSummaryText("Debes elegir un producto")
   };
 
   useEffect(() => {
@@ -74,7 +74,7 @@ export default function ProductsPage() {
             className={`flex mt-5 ms-2 font-semibold rounded-full py-5 px-5 text-gray-800 rounded border-2 border-black relative transition-colors duration-200
             ${cart.length > 0 ? 'bg-custom-yellow hover:bg-amber-400' : 'bg-gray-300 cursor-not-allowed'}
             `}
-            onClick={handleContinue}
+            onClick={cart.length > 0 ? handleContinue : handleDeniend}
             >
             Continuar
             <img 
@@ -92,22 +92,6 @@ export default function ProductsPage() {
           <div className="text-center text-gray-600 mt-2">{summaryText}</div>
         </div>
       )}
-      
-      {openModalSelectBajon &&
-        <ModalSectionBajon
-        productId={selectedProductId}
-        isModalOpen={openModalSelectBajon}
-        onClose={() => {
-          setSelectedProductId(null);
-          setOpenModalSelectBajon(false);
-        }}
-        onSelectSalsas={(salsas) => {
-          console.log('Salsas seleccionadas:', salsas);
-          setOpenModalRequest(true);
-        }}
-        onContinue={handleContinue}
-        />
-      }
 
       {openModalRequest &&  (
         <ModalRequest

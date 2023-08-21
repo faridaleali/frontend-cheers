@@ -4,9 +4,9 @@ import { Product } from "@/app/interfaces/products.interface";
 
 interface CartContextType {
     cart: Product[];
-    addToCart: (product: Product, salsas?: { bm: number; sweetB: number; jasons: number }, carritoId?: number) => void;
+    addToCart: (product: Product, salsas?: { bm: number; sweetB: number; jasons: number }) => void;
     removeFromCart: (product: Product) => void;
-    updateProductInCart: (productId: string, updatedProduct: Product[]) => void; // Agregamos esta función
+    updateProductInCart: (productId: number, updatedProduct: Product) => void; // Agregamos esta función
     clearCart: () => void;
 }
 
@@ -21,36 +21,47 @@ export const CartContext = createContext<CartContextType>({
 export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [cart, setCart] = useState<Product[]>([]);
 
-    const addToCart = (product: Product, salsas?: { bm: number; sweetB: number; jasons: number }, carritoId?: number) => {
-        if (salsas) {
-            console.log(salsas)
-            product.salsas = salsas;
-            console.log(product)
-        }
+    const addToCart = (product: Product, salsas?: { bm: number; sweetB: number; jasons: number }) => {
+      if (salsas) {
+          product.salsas = salsas;
+      }
 
-        if(carritoId) {
-            product.carritoId = carritoId
-        }
+      if (cart.find(item => item.id === product.id)) 
+      {
+        const updatedCart = cart.map(item => item.id === product.id 
+          ? {...item, cantidad: product.cantidad + 1}
+          : item )
 
-        setCart(currentCart => [...currentCart, product]);
+        return setCart([...updatedCart])
+      }
+
+      setCart(currentCart => [...currentCart, product]);
+
     };
 
-    const removeFromCart = (product: Product) => {
-        setCart(currentCart => {
-          const index = currentCart.findIndex(item => item.id === product.id);
-          if (index !== -1) {
-            const updatedCart = [...currentCart];
-            updatedCart.splice(index, 1);
-            return updatedCart;
-          }
-          return currentCart;
-        });
+    const removeFromCart = (productToRemove: Product) => {
+      setCart(currentCart => 
+      {
+        const updatedCart = currentCart.map(item => 
+          item.id === productToRemove.id && item.cantidad > 0
+            ? {...item, cantidad: item.cantidad - 1}
+            : item
+        );
+    
+        const index = updatedCart.findIndex(item => item.id === productToRemove.id);
+        if (index !== -1 && updatedCart[index].cantidad === 0) {
+          updatedCart.splice(index, 1);
+        }
+    
+        return updatedCart;
+      });
     };
+    
 
-    const updateProductInCart = (productId: string, updatedProduct: Product) => {
+    const updateProductInCart = (productoId: number, updatedProduct: Product) => {
         setCart((currentCart) => {
           const updatedCart = currentCart.map((item) => {
-            if (item.id === productId) {
+            if (item.id === productoId) {
               return updatedProduct;
             }
             return item;
@@ -65,7 +76,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     return (
         <CartContext.Provider value={{ cart, addToCart, removeFromCart, updateProductInCart, clearCart }}>
-            {children}
+          {children}
         </CartContext.Provider>
     );
 };

@@ -6,21 +6,14 @@ import Image from 'next/image'
 function CardProduct({ product, onAddToCart }: CardProductProps) {
   const { addToCart, removeFromCart } = useCart();
   const [quantity, setQuantity] = useState(0);
-  const [carritoIdCounter, setCarritoIdCounter] = useState(1);
-
-  const salsas =  {
-    bm: 0,
-    sweetB: 0,
-    jasons: 0
-  }
+  
 
   const increaseQuantity = useCallback(() => {
     if (quantity < 2) {
       setQuantity(quantity + 1);
-      addToCart(product, salsas, carritoIdCounter);
-      setCarritoIdCounter(carritoIdCounter + 1); // Incrementar el contador
+      addToCart(product);
     }
-  }, [addToCart, product, quantity, carritoIdCounter]);
+  }, [addToCart, product, quantity]);
 
   const decreaseQuantity = useCallback(() => {
     if (quantity > 0) {

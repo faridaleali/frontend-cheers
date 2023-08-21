@@ -1,4 +1,3 @@
-import { useState, useEffect, useCallback } from 'react';
 import { useCart } from '@/app/helpers/CartProvider';
 import { Salsas, Product } from '@/app/interfaces/products.interface';
 
@@ -10,19 +9,23 @@ interface SalsasSeleccionProps {
 export const SalsasSeleccion: React.FC<SalsasSeleccionProps> = ({ onSalsaSelection, productId }) => {
   const { cart, updateProductInCart } = useCart();
 
-  const handleIncrement = (productoId: string, Salsa: string) => {
+  const handleIncrement = (productoId: number, Salsa: string) => {
     const updatedCart = cart.map((product) => {
       if (product.id === productoId) {
         const updatedProduct = { 
           ...product
-        }; 
-        
-        if (Salsa === "BM") {
-          updatedProduct.salsas.bm += 1;
-        } else if (Salsa === "SW") {
-          updatedProduct.salsas.sweetB += 1;
-        } else if (Salsa === "JS") {
-          updatedProduct.salsas.jasons += 1;
+        };
+
+        const totalSalsas = (updatedProduct.salsas.bm + updatedProduct.salsas.sweetB + updatedProduct.salsas.jasons)
+
+        if(totalSalsas < 2 * updatedProduct.cantidad) {
+          if (Salsa === "BM") {
+            updatedProduct.salsas.bm += 1;
+          } else if (Salsa === "SW") {
+            updatedProduct.salsas.sweetB += 1;
+          } else if (Salsa === "JS") {
+            updatedProduct.salsas.jasons += 1;
+          }
         }
 
         updateProductInCart(productoId, updatedProduct);
@@ -31,11 +34,12 @@ export const SalsasSeleccion: React.FC<SalsasSeleccionProps> = ({ onSalsaSelecti
       }
       return product;
     });
+
   };
 
-  const handleDecrement = (productoId: string, Salsa: string) => {
+  const handleDecrement = (productId: number, Salsa: string) => {
     const updatedCart = cart.map((product) => {
-      if (product.id === productoId) {
+      if (product.id === productId) {
         const updatedProduct = { ...product };
         
         if (Salsa === "BM" && updatedProduct.salsas.bm > 0) {
@@ -46,31 +50,50 @@ export const SalsasSeleccion: React.FC<SalsasSeleccionProps> = ({ onSalsaSelecti
           updatedProduct.salsas.jasons -= 1;
         }
 
-        updateProductInCart(productoId, updatedProduct);
+        updateProductInCart(productId, updatedProduct);
 
         return updatedProduct;
       }
       return product;
     });
+
   };
 
   return (
-    <div className="flex flex-col bg-black p-4 mt-4 rounded-lg shadow-lg font-semibold text-custom-yellow">
-      <h2 className="flex flex-row justify-center text-xl font-semibold mb-4">Selecciona tus salsas</h2>
+    <div className="flex flex-col bg-black p-4 mt-4 rounded-lg shadow-lg font-semibold text-amber-400">
+      <h2 className="flex flex-row justify-center text-xl font-semibold mb-4 text-gray-200 text-2xl">Selecciona tus salsas</h2>
+      <div className='flex flex-col text-center m-auto text-gray-200'>
+        <h3 className='text-gray-200 mb-4 text-xl'>Tipos de salsas</h3>
+        <hr></hr>
+        <div className='flex flex-col justify-center align-center mt-5 mb-5 text-gray-200'>
+          <h5 className='text-xl text-amber-400'>BM</h5>
+          <p className='italic underline underline-offset-4 text-gray-400'>Mayonesa, Mostaza, Ketchup, Pepinillos y Cebolla</p>
+        </div>
+        <div className='text-gray-200 mb-4'>
+          <h5 className='text-xl text-amber-400 '>Sweet B</h5>
+          <p className='italic underline underline-offset-4 text-gray-400'>Ketchup, Vinagre y Salsa de Soja. Es Agridulce!!!</p>
+        </div>
+        <div className='text-gray-200 mb-7'>
+          <h5 className='text-xl text-amber-400'>Jasons</h5>
+          <p className='italic underline underline-offset-4 text-gray-400'>Mayonesa y Barbacoa. Es un toque picantita!. Guarda!</p>
+        </div>
+        <hr></hr>
+      </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-4 pb-4">
         {cart.map((product) => (
-          <div key={product.id} className="flex flex-col items-center font-semibold border border-white rounded-lg p-2 shadow-outline">
+          <div key={product.id} className="flex flex-col justify-center bg-stone-900 items-center font-semibold rounded-lg p-2 shadow-outline">
             <h2 className="mb-3 mt-0 text-center">{product.nombre}</h2>
             <div>
               <img 
               src={product.imageUrl}
               alt={product.descripcion} 
-              className='w-15'
+              className='w-8/12 rounded-full m-auto'
               />
-              <div className='flex flex-row mt-4 justify-center'>
-                <div className='flex flex-col'>
+              <p className='flex flex-row justify-center mt-2'>Cantidad: {product.cantidad}</p>
+              <div className='flex flex-row mt-4 justify-center justify-center'>
+                <div className='flex flex-col text-amber-500'>
                   <div className='flex flex-row justify-center'>
-                    <h3 className="text-lg font-bold text-custom-yellow ">BM</h3>
+                    <h3 className="text-lg font-bold ">BM</h3>
                   </div>
                   <div className='flex flex-row mr-2'>
                   <button
@@ -103,7 +126,7 @@ export const SalsasSeleccion: React.FC<SalsasSeleccionProps> = ({ onSalsaSelecti
                 </div>
                 <div className='flex flex-col'>
                   <div className='flex flex-row justify-center'>
-                    <h3 className="text-lg font-bold text-custom-yellow">Sweet B</h3>
+                    <h3 className="text-lg font-bold">Sweet B</h3>
                   </div>
                   <div className='flex flex-row'>
                     <button
@@ -135,7 +158,7 @@ export const SalsasSeleccion: React.FC<SalsasSeleccionProps> = ({ onSalsaSelecti
                   </div>
                 </div>
                   <div className='flex flex-col'>
-                  <h3 className="text-lg font-bold text-custom-yellow">Jason B</h3>
+                  <h3 className="text-lg font-bold">Jason B</h3>
                   <div className='flex flex-row'>
                   <button
                     onClick={() => handleDecrement(product.id, "JS")}

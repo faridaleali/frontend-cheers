@@ -24,7 +24,7 @@ const DetalleCompleto = () => {
     return acc;
   }, {} as { [key: string]: ProductWithQuantity });
 
-  const total = Object.values(groupedCart).reduce((acc, product) => acc + (product.precio * product.quantity), 0);
+  const total = Object.values(groupedCart).reduce((acc, product) => acc + (product.precio * product.cantidad), 0);
 
   /* Envios de pedido a WhatsApp */
 
@@ -50,7 +50,7 @@ const DetalleCompleto = () => {
   Calle: ${clientData.calle}
   Número: ${clientData.numero}
   Piso: ${clientData.piso}
-  Metodo de pago: <cliente_payopt>
+  Metodo de pago: ${clientData.pago}
 
   Detalle del pedido: \n${pedidoTexto}
 
@@ -58,7 +58,7 @@ const DetalleCompleto = () => {
       Jason(2) = $200
       BM(1) = $100
 
-  Precio total:  [ $ 4350 ]`;
+  Precio total:  [ $ ${clientData.efectivo} ]`;
 
   const numeroWhasApp: string = "5493816252587"
 
@@ -90,7 +90,7 @@ const DetalleCompleto = () => {
         {<ul className="list-disc pl-4 mb-4">
           {Object.values(groupedCart).map((product) => (
             <li key={product.id} className="mb-2">
-              {product.nombre} - ${product.precio} (Total: {product.quantity} pedido{product.quantity !== 1 ? 's' : ''})
+              {product.nombre} - ${product.precio} | Cantidad: {product.cantidad} | BM: {product.salsas.bm} - SweetB: {product.salsas.sweetB} - Jason : {product.salsas.jasons}
             </li>
           ))}
           </ul>}

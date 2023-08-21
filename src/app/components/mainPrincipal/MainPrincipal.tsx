@@ -10,9 +10,10 @@ import ProductsPage from "../products/Products";
 import { ClientDataProvider } from "@/app/helpers/ClientDataContext";
 
 export default function MainPrincipal() {
+
     return (
         <ClientDataProvider>
-            <CartProvider >
+            <CartProvider>
                 <div className="container__header h-screen flex flex-col">
                     <nav>
                         <HeaderMenu />

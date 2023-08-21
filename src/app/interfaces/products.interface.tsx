@@ -5,15 +5,15 @@ export interface Salsas {
   }
   
  export interface Product {
-    id: string;
+    id: number;
+    carritoId: number;
     nombre: string;
     descripcion: string;
     precio: number;
     imageUrl: string;
-    quantity: number;
+    cantidad: number;
     salsas: Salsas;
     costoSalsas: number;
-    carritoId: number;
   }
   
 // Usar la interfaz en tu componente CardProduct

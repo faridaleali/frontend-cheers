@@ -44,28 +44,44 @@ export default function ModalRequest({
     }
     return acc;
   }, {} as { [key: string]: ProductWithQuantity });
+
+  const total = Object.values(groupedCart).reduce((acc, product) => acc + (product.precio * product.cantidad), 0);
   
   /* POST PARA BACKEND */
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const totalProductos = Object.values(groupedCart).reduce( (acc, product) => acc + product.quantity, 0);
-
-    const productos = cart.map((producto, index) => producto.nombre)
-
-    const salsasNombres = {
-      bm: cart.map((producto) => producto.salsas?.bm),
-      jasons: cart.map((producto) => producto.salsas?.jasons),
-      sweetB: cart.map((producto) => producto.salsas?.sweetB),
-    };
+    const totalProductos = Object.values(groupedCart).reduce( (acc, product) => acc + product.cantidad, 0);
 
     const salsaCostos = cart.map((producto, index) => producto.costoSalsas)
 
-    console.log(salsaCostos)
-    console.log(cart)
+    const productosPedidos = cart.map((producto, index) => producto.nombre)
 
-    const updatedClientData = { ...clientData, pago: selectedOption, products: productos, quantity: totalProductos}
+    const salsasDePedido = cart.map((producto, index) => producto.salsas)
+
+    const cantidadDePedido = cart.map((producto, index) => producto.cantidad)
+
+    const updatedProducts = productosPedidos.map(productoNombre => {
+      const productoIndex = cart.findIndex(producto => producto.nombre === productoNombre);
+      if (productoIndex !== -1) {
+          return {
+              nombre: cart[productoIndex].nombre,
+              salsas: salsasDePedido[productoIndex],
+              cantidad: cantidadDePedido[productoIndex]
+          };
+      }
+      return null;
+  }).filter(producto => producto !== null);
+
+    console.log(salsasDePedido)
+
+    const updatedClientData = { 
+      ...clientData, 
+      pago: selectedOption,
+      products: updatedProducts,
+      quantity: totalProductos
+    }
       
     ordenarService.postOrdenar(updatedClientData)
       .then((data) => {
@@ -92,6 +108,7 @@ export default function ModalRequest({
     }
 
     setSelectedOption(field === 'efectivo' ? 'efectivo' : 'transferencia');
+
     setClientData({ ...clientData, [field]: value });
   };
 
@@ -213,7 +230,7 @@ export default function ModalRequest({
                 <input
                   className={`form-input mt-1 text-center block w-full border-b-2 border-custom-yellow bg-transparent text-white outline-none
                   ${selectedOption === 'efectivo' ? 'border border-green-500' : 'border border-red-500 cursor-not-allowed'}`}
-                  placeholder='$1.500'
+                  placeholder={String(total)}
                   type="text"
                 />
               </label>

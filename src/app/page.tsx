@@ -3,8 +3,6 @@ import '@fontsource/montserrat';
 
 export default function Home() {
   return (
-    <div>
-      <MainPrincipal />
-    </div>
+    <MainPrincipal />
   );
 }
