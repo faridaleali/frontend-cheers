@@ -31,7 +31,7 @@ const DetalleCompleto = () => {
   const pedidosWhatsapp = () => {
 
     const pedidoStrings = Object.values(groupedCart).map((product) => {
-      return `• ${product.nombre} - ${product.precio} (Total: ${product.quantity})`;
+      return `• ${product.nombre} - ${product.precio} (Total: ${product.quantity}) BM:${product.salsas.bm} SB:${product.salsas.sweetB} JS:${product.salsas.jasons}`;
     });
   
     const pedidoTexto = pedidoStrings.join("\n");
@@ -50,15 +50,11 @@ const DetalleCompleto = () => {
   Calle: ${clientData.calle}
   Número: ${clientData.numero}
   Piso: ${clientData.piso}
-  Metodo de pago: ${clientData.pago}
+  Metodo de pago: ${clientData.efectivo}
 
   Detalle del pedido: \n${pedidoTexto}
 
-  Agregado de salsas: 
-      Jason(2) = $200
-      BM(1) = $100
-
-  Precio total:  [ $ ${clientData.efectivo} ]`;
+  Precio total:  [ $ ${clientData.pago} ]`;
 
   const numeroWhasApp: string = "5493816252587"
 

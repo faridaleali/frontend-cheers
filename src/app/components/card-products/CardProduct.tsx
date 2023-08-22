@@ -4,7 +4,7 @@ import { CardProductProps } from '../../interfaces/products.interface';
 import Image from 'next/image'
 
 function CardProduct({ product, onAddToCart }: CardProductProps) {
-  const { addToCart, removeFromCart } = useCart();
+  const { addToCart, removeFromCart, clearSalsas } = useCart();
   const [quantity, setQuantity] = useState(0);
   
 
@@ -16,11 +16,15 @@ function CardProduct({ product, onAddToCart }: CardProductProps) {
   }, [addToCart, product, quantity]);
 
   const decreaseQuantity = useCallback(() => {
+
+    clearSalsas(product.id) //Sacamos todas las salsas seleccionadas
+
     if (quantity > 0) {
       setQuantity(quantity - 1);
       if (product.id) {
         removeFromCart(product);
       }
+
     }
   }, [product, quantity, removeFromCart]);
 

@@ -7,6 +7,7 @@ interface CartContextType {
     addToCart: (product: Product, salsas?: { bm: number; sweetB: number; jasons: number }) => void;
     removeFromCart: (product: Product) => void;
     updateProductInCart: (productId: number, updatedProduct: Product) => void; // Agregamos esta función
+    clearSalsas: (productId: number) => void;
     clearCart: () => void;
 }
 
@@ -15,6 +16,7 @@ export const CartContext = createContext<CartContextType>({
     addToCart: () => {},
     removeFromCart: () => {},
     updateProductInCart: () => {},
+    clearSalsas: () => {},
     clearCart: () => {}
 });
 
@@ -59,23 +61,35 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     
 
     const updateProductInCart = (productoId: number, updatedProduct: Product) => {
-        setCart((currentCart) => {
-          const updatedCart = currentCart.map((item) => {
-            if (item.id === productoId) {
-              return updatedProduct;
-            }
-            return item;
-          });
-          return updatedCart;
+      setCart((currentCart) => {
+        const updatedCart = currentCart.map((item) => {
+          if (item.id === productoId) {
+            return updatedProduct;
+          }
+          return item;
         });
-      };
+        return updatedCart;
+      });
+    };
+
+    const clearSalsas = (productId: number) => {
+      const updatedCart = cart.map(item => {
+        if (item.id === productId) {
+          const updatedItem = { ...item, salsas: { bm: 0, sweetB:0, jasons:0 } };
+          return updatedItem;
+        }
+        return item;
+      });
+    
+      setCart(updatedCart);
+    }
       
     const clearCart = () => {
         setCart([]);
     };
 
     return (
-        <CartContext.Provider value={{ cart, addToCart, removeFromCart, updateProductInCart, clearCart }}>
+        <CartContext.Provider value={{ cart, addToCart, removeFromCart, updateProductInCart, clearSalsas, clearCart }}>
           {children}
         </CartContext.Provider>
     );

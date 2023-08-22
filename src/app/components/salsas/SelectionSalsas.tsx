@@ -38,6 +38,7 @@ export const SalsasSeleccion: React.FC<SalsasSeleccionProps> = ({ onSalsaSelecti
   };
 
   const handleDecrement = (productId: number, Salsa: string) => {
+
     const updatedCart = cart.map((product) => {
       if (product.id === productId) {
         const updatedProduct = { ...product };
@@ -56,7 +57,6 @@ export const SalsasSeleccion: React.FC<SalsasSeleccionProps> = ({ onSalsaSelecti
       }
       return product;
     });
-
   };
 
   return (
