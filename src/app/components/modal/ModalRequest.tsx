@@ -1,18 +1,13 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useClientData } from "@/app/helpers/ClientDataContext";
 import DetalleCompleto from "../../components/detalle/detalle";
-
-// Productos
 import { Product } from '@/app/interfaces/products.interface';
 import { useCart } from "@/app/helpers/CartProvider";
-
-// CODIGO NUEVO
-
 import Ordenar from '../../../../api/entities/Ordenar'; 
 import apiClient from '../../../../api/services/apiService';
 
 const ordenarService = new Ordenar(apiClient);
-    
+
 interface ModalRequestProps {
   isModalOpen: boolean;
   onClose: () => void;
@@ -25,17 +20,10 @@ export default function ModalRequest({
   onContinue,
 }: ModalRequestProps) {
 
-  /* USE STATES */
-
   const [showDetalleCompleto, setShowDetalleCompleto] = useState(false);
   const [phoneNumberError, setPhoneNumberError] = useState("");
-  const [selectedOption, setSelectedOption] = useState<string>('efectivo');
-
   const { cart } = useCart();
   const { clientData, setClientData } = useClientData();
-
-  // Revisar logica de esta funcion
-
   const groupedCart = cart.reduce((acc, product) => {
     if (acc[product.id]) {
       acc[product.id].quantity += 1
@@ -45,16 +33,16 @@ export default function ModalRequest({
     return acc;
   }, {} as { [key: string]: ProductWithQuantity });
 
-  const total = Object.values(groupedCart).reduce((acc, product) => acc + (product.precio * product.cantidad), 0);
-  
   /* POST PARA BACKEND */
+
+  const costoEnvio = 500
+
+  const totalPago = Object.values(groupedCart).reduce((acc, product) => acc + (product.precio * product.cantidad), 0) + costoEnvio;
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const totalProductos = Object.values(groupedCart).reduce( (acc, product) => acc + product.cantidad, 0);
-
-    const salsaCostos = cart.map((producto, index) => producto.costoSalsas)
 
     const productosPedidos = cart.map((producto, index) => producto.nombre)
 
@@ -77,16 +65,19 @@ export default function ModalRequest({
     console.log(salsasDePedido)
 
     const updatedClientData = { 
-      ...clientData, 
-      pago: selectedOption,
+      ...clientData,
+      efectivo: totalPago,
       products: updatedProducts,
       quantity: totalProductos
     }
+
+    setClientData({ ...clientData, efectivo: totalPago });
       
     ordenarService.postOrdenar(updatedClientData)
       .then((data) => {
         
         console.log("Datos enviados")
+        console.log(updatedClientData)
         console.log(data);
         
         setShowDetalleCompleto(true);
@@ -98,7 +89,9 @@ export default function ModalRequest({
 
   const handleChange = ( e: React.ChangeEvent<HTMLInputElement>, field: string ) => {
     const value = e.target.value;
-    if (field === 'telefono') {
+
+    if (field === 'telefono') 
+    {
       const phoneNumberRegex = /^\d{0,10}$/;
       if (!phoneNumberRegex.test(value)) {
         setPhoneNumberError("El número de teléfono debe tener hasta 10 dígitos.");
@@ -107,10 +100,8 @@ export default function ModalRequest({
       }
     }
 
-    setSelectedOption(field === 'efectivo' ? 'efectivo' : 'transferencia');
-
     setClientData({ ...clientData, [field]: value });
-  };
+  }
 
   /* DOM */
 
@@ -205,8 +196,8 @@ export default function ModalRequest({
                   id="bordered-radio-1" 
                   type="radio" 
                   value= "efectivo"
-                  checked={selectedOption === 'efectivo'}
-                  onChange={(e) => handleChange(e, 'efectivo')} 
+                  checked={clientData.forma === 'efectivo'}
+                  onChange={(e) => handleChange(e, 'forma')} 
                   name="metodo-pago" 
                   className="ms-4">
                   </input>
@@ -218,22 +209,22 @@ export default function ModalRequest({
                   id="bordered-radio-2" 
                   type="radio" 
                   value="transferencia"
-                  checked={selectedOption === 'transferencia'}
-                  onChange={(e) => handleChange(e, 'transferencia')}
+                  checked={clientData.forma === 'transferencia'}
+                  onChange={(e) => handleChange(e, 'forma')}
                   name="metodo-pago"
                   className="ms-5">
                   </input>
                 </div>
               </div>
-              <label className="flex flex-row m-auto justify-center mt-2">
+              {/*<label className="flex flex-row m-auto justify-center mt-2">
                 <span className="flex flex-row text-white justify-center">Efectivo a pagar $$$</span>
                 <input
                   className={`form-input mt-1 text-center block w-full border-b-2 border-custom-yellow bg-transparent text-white outline-none
-                  ${selectedOption === 'efectivo' ? 'border border-green-500' : 'border border-red-500 cursor-not-allowed'}`}
-                  placeholder={String(total)}
+                  ${clientData.forma === 'efectivo' ? 'border border-green-500' : 'border border-red-500 cursor-not-allowed'}`}
+                  placeholder={"$" + (totalPago - costoEnvio) + " + $" + costoEnvio + " envio"}
                   type="text"
                 />
-              </label>
+                </label>*/}
               <div className="flex justify-center pt-2">
                 <button
                   className="px-4 my-6 mt-5 bg-custom-yellow p-3 rounded-lg text-black hover:bg-custom-yellow hover:text-black mr-2"

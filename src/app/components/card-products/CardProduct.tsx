@@ -17,7 +17,7 @@ function CardProduct({ product, onAddToCart }: CardProductProps) {
 
   const decreaseQuantity = useCallback(() => {
 
-    clearSalsas(product.id) //Sacamos todas las salsas seleccionadas
+    clearSalsas(product.id) // Sacamos todas las salsas seleccionadas
 
     if (quantity > 0) {
       setQuantity(quantity - 1);

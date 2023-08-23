@@ -24,8 +24,6 @@ const DetalleCompleto = () => {
     return acc;
   }, {} as { [key: string]: ProductWithQuantity });
 
-  const total = Object.values(groupedCart).reduce((acc, product) => acc + (product.precio * product.cantidad), 0);
-
   /* Envios de pedido a WhatsApp */
 
   const pedidosWhatsapp = () => {
@@ -39,6 +37,9 @@ const DetalleCompleto = () => {
     return pedidoTexto;
   };
 
+  console.log(clientData)
+  console.log(clientData.efectivo)
+
   const pedidoTexto = pedidosWhatsapp();
 
   const mensajeWhatsApp: string = `⚡Holaaa buenas noches, muchas gracias por elegirnos, envíanos tu pedido ⚡
@@ -50,11 +51,11 @@ const DetalleCompleto = () => {
   Calle: ${clientData.calle}
   Número: ${clientData.numero}
   Piso: ${clientData.piso}
-  Metodo de pago: ${clientData.efectivo}
+  Metodo de pago: ${clientData.forma}
 
   Detalle del pedido: \n${pedidoTexto}
 
-  Precio total:  [ $ ${clientData.pago} ]`;
+  Precio total:  [ $ ${clientData.efectivo} (Costo envio incluido + $500)  ]`;
 
   const numeroWhasApp: string = "5493816252587"
 
@@ -78,7 +79,8 @@ const DetalleCompleto = () => {
         <p className="mb-1">Teléfono: {clientData.telefono}</p>
         <p className="mb-1">Calle: {clientData.calle}</p>
         <p className="mb-1">Número: {clientData.numero}</p>
-        <p className="mb-3">Piso: {clientData.piso}</p>
+        <p className="mb-1">Piso: {clientData.piso}</p>
+        <p className="mb-2">Forma de pago: {clientData.forma}</p>
       </div>
 
       <div>
@@ -86,7 +88,7 @@ const DetalleCompleto = () => {
         {<ul className="list-disc pl-4 mb-4">
           {Object.values(groupedCart).map((product) => (
             <li key={product.id} className="mb-2">
-              {product.nombre} - ${product.precio} | Cantidad: {product.cantidad} | BM: {product.salsas.bm} - SweetB: {product.salsas.sweetB} - Jason : {product.salsas.jasons}
+              {product.nombre} - ${product.precio} | Cantidad: {product.cantidad} | BM: {product.salsas.bm} SweetB: {product.salsas.sweetB} Jason : {product.salsas.jasons}
             </li>
           ))}
           </ul>}
@@ -94,7 +96,7 @@ const DetalleCompleto = () => {
 
       <div>
         <h3 className="text-xl font-bold">Total a Pagar</h3>
-        <p>${total}</p>
+        <p>${clientData.efectivo} Envio incluido ($500)</p>
       </div>
       <div className='flex justify-center'>
         <button className="flex mt-5 text-black font-semibold rounded-md bg-yellow-400 p-4" id="btnEnviarPedido" onClick={handleEnviarPedido}>

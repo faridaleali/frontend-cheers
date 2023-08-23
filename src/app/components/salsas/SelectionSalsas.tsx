@@ -1,12 +1,7 @@
 import { useCart } from '@/app/helpers/CartProvider';
 import { Salsas, Product } from '@/app/interfaces/products.interface';
 
-interface SalsasSeleccionProps {
-  onSalsaSelection: (salsas: Salsas) => void;
-  productId: string | null;
-}
-
-export const SalsasSeleccion: React.FC<SalsasSeleccionProps> = ({ onSalsaSelection, productId }) => {
+export const SalsasSeleccion = () => {
   const { cart, updateProductInCart } = useCart();
 
   const handleIncrement = (productoId: number, Salsa: string) => {
@@ -79,9 +74,13 @@ export const SalsasSeleccion: React.FC<SalsasSeleccionProps> = ({ onSalsaSelecti
         </div>
         <hr></hr>
       </div>
+      <div className='flex flex-col justify-center m-auto text-center mt-5'>
+        <p className='font-bold text-lg bg-amber-400 text-black w-70 px-5 py-3'>Solo es posible 2 tipos de salsas gratis por unidad</p>
+        <hr className='mt-5'></hr>
+      </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-4 pb-4">
         {cart.map((product) => (
-          <div key={product.id} className="flex flex-col justify-center bg-stone-900 items-center font-semibold rounded-lg p-2 shadow-outline">
+          <div key={product.id} className="flex flex-col justify-center bg-stone-800 brightness-90 items-center font-semibold rounded-lg p-2 shadow-outline">
             <h2 className="mb-3 mt-0 text-center">{product.nombre}</h2>
             <div>
               <img 
