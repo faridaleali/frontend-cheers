@@ -59,13 +59,7 @@ export default function ProductsPage() {
         <h3 className="text-3xl sm:text-4xl md:text-3xl font-bold text-center text-gray-800 mb-4">Tus productos seleccionados</h3>
       </div>
 
-      {
-        <SalsasSeleccion
-        onSalsaSelection={(salsas) =>
-          console.log("salsas god", salsas)
-        }
-        productId={selectedProductId}
-      />}
+      <SalsasSeleccion/>
 
       {(
         <div className="items-center justify-center">
