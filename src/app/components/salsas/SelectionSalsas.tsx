@@ -21,7 +21,21 @@ export const SalsasSeleccion = () => {
           } else if (Salsa === "JS") {
             updatedProduct.salsas.jasons += 1;
           }
+        } 
+        /*else if (totalSalsas >= 2 && totalSalsas < 5) {
+          if (Salsa === "BM") {
+            updatedProduct.salsas.bm += 1;
+            updatedProduct.costoSalsas += 100
+          } else if (Salsa === "SW") {
+            updatedProduct.salsas.sweetB += 1;
+            updatedProduct.costoSalsas += 100
+          } else if (Salsa === "JS") {
+            updatedProduct.salsas.jasons += 1;
+            updatedProduct.costoSalsas += 100
+          }
         }
+
+        console.log(updatedProduct.costoSalsas)*/
 
         updateProductInCart(productoId, updatedProduct);
 
@@ -37,6 +51,12 @@ export const SalsasSeleccion = () => {
     const updatedCart = cart.map((product) => {
       if (product.id === productId) {
         const updatedProduct = { ...product };
+
+        /*const totalSalsas = (updatedProduct.salsas.bm + updatedProduct.salsas.sweetB + updatedProduct.salsas.jasons)
+
+        if(totalSalsas <= 5 && totalSalsas > 2 ) {
+          updatedProduct.costoSalsas -= 100
+        }*/
         
         if (Salsa === "BM" && updatedProduct.salsas.bm > 0) {
           updatedProduct.salsas.bm -= 1;
@@ -45,6 +65,8 @@ export const SalsasSeleccion = () => {
         } else if (Salsa === "JS" && updatedProduct.salsas.jasons > 0) {
           updatedProduct.salsas.jasons -= 1;
         }
+
+        // console.log(updatedProduct.costoSalsas)
 
         updateProductInCart(productId, updatedProduct);
 

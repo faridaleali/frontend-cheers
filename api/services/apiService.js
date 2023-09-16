@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const apiClient = axios.create({
-  baseURL: 'http://localhost:9000/api',
+  baseURL: 'https://backend-cheers.onrender.com/api',
 });
 
 export default apiClient;
