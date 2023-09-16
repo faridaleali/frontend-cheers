@@ -57,7 +57,7 @@ const DetalleCompleto = () => {
 
   Precio total:  [ $ ${clientData.efectivo} (Costo envio incluido + $500)  ]`;
 
-  const numeroWhasApp: string = "5493816252587"
+  const numeroWhasApp: string = "5493811234567"
 
   const apiWhatsApp: string = `https://api.whatsapp.com/send?phone=${numeroWhasApp}&text=${encodeURIComponent(mensajeWhatsApp)}`;
 
